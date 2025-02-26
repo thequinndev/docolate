@@ -67,6 +67,37 @@ const userQueries = queryGroup([
     createUser
 ])
 ```
+#### Step 2 - Create the Query Manager
+The query manager will store and allow you to run all the queries you have grouped together. You can include as few or as many queries as you want. The query manager config includes:
+* Parameter Strategy - Enum - What is your parameter strategy for your DB client (Dollar: $1, Colon: :key, QuestionMark: ?). i.e. what does your DB client use to represent parameters in a query.
+* Client - A client that implements the ClientInterface - You can create your own client or use one of the pre-built ones from this library.
+* Queries - Your list of queries.
+```typescript
+import { ParameterStrategy, QueryManager } from '@thequinndev/db-manager/query-manager'
+
+const userQueryManager = QueryManager({
+    paramaterStrategy: ParameterStrategy.Dollar,
+    client: mockArrayClient({
+        example: [
+            {
+                markedBy: ['example'],
+                returns: 'example'
+            }
+        ]
+    }),
+    // Using the queries we made earlier
+    queries: userQueries
+})
+```
+#### Step 3 - Running your queries
+```typescript
+// Running the createUser query we declared earlier.
+const myUser = userQueryManager.run('createUser', {
+    description: 'A new user', // This must be type string
+    name: 'New Name' // This must be type string
+}) // This will return an Object that conforms to userTableSchema into the variable myUser
+```
+
 ### Note on duplicate parameters
 Hyphothetically if you need to use the same parameter twice in a query. For example here (bad example for demonstration only) where $1 and $2 will be the same user_id.
 ```sql
@@ -78,7 +109,7 @@ AND user_id NOT IN (
 ```
 In this instance you would declare the property twice and it will be merged down into one key in the function call. You need to declare all the values so every item in the array can be parameterized properly.
 ```typescript
-const createUser = query({
+const queryThatWillNeverHappen = query({
     query: `select * from my_table
     where user_id = $1
     AND user_id NOT IN (
@@ -96,6 +127,47 @@ const createUser = query({
     ] as const),
     returns: z.unknown()
 })
-
+// userId only needs to be populated once
 queryManager.run('queryThatWillNeverHappen', {userId: 1234})
+```
+
+### Document Manager
+Similar to query manager, document manager will also accept your list of queries.
+* Parameter Strategy - Enum - What is your parameter strategy for your DB client (Dollar: $1, Colon: :key, QuestionMark: ?). i.e. what does your DB client use to represent parameters in a query.
+* Queries - Your list of queries.
+```typescript
+import { DocumentManager, ParameterStrategy } from "@thequinndev/db-manager
+
+const documentManager = DocumentManager({
+    paramaterStrategy: ParameterStrategy.Dollar,
+    queries: userQueries // The queries we declared earlier
+})
+
+// You can also annotate your queries with additional fields if you want
+documentManager.annotate('createUser', {
+    title: 'Create a new user',
+    parameterExample: {
+        name: 'Richard Sanders',
+        description: 'A valuable user.'
+    },
+    returnExample: {
+        id: 1234,
+        name: 'Richard Sanders',
+        description: 'A valuable user.',
+        date: '01/01/1970'
+    }
+})
+
+// Compile the document
+const doc = documentManager.compile()
+
+// Write it to a file
+writeFileSync(__dirname + '/doc.example.md', doc)
+```
+##### Document example
+A document example is included in ``examples/db-manager/document/doc.example.md``.
+
+To generate it, run 
+```
+pnpm run build:example:db-doc
 ```
