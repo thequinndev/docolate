@@ -5,12 +5,14 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "build:example:db-doc": "tsx examples/db-manager/document/index.ts"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "zod": "^3.24.2"
+    "zod": "^3.24.2",
+    "zod-to-json-schema": "^3.24.3"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -22,6 +24,7 @@
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.7"
+    "vitest": "^3.0.7",
+    "@thequinndev/db-manager": "workspace:*"
   }
 }
