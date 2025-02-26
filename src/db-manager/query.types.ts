@@ -15,7 +15,7 @@ export type Query<
   query: QueryString;
   parameters?: ParametersSchema;
   returns: Returns;
-  onResultRetrieval?: (result: { rows: any[] }) => void;
+  onResultRetrieval?: (result: any) => void;
 };
 
 export type BaseQueryItem = Query<
@@ -56,6 +56,7 @@ export type QueryParametersCollapsed<T extends ParamSchemaBase | undefined> = T 
         : never
       : never as K["key"]]: K["type"];
   };
+  original: T,
   arrayResolver: (params: any) => any[],
   keyValueResolver: (params: any) => any
 } : never;

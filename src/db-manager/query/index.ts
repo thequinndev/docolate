@@ -38,6 +38,7 @@ export const queryParameters = <T extends Record<string, z.ZodType<any>>[]>(
     }
 
     return {
+        original: schemas,
         collapsed,
         arrayResolver,
         keyValueResolver
