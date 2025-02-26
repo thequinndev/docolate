@@ -1,4 +1,4 @@
-# Docolate
+# Docolate 🍫
 Sweet documentation.
 ## DB Manager
 The first module in Docolate (more planned). It is currently a work in progress. Requires zod: https://zod.dev/
