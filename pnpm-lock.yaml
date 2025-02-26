@@ -15,6 +15,9 @@ importers:
         specifier: ^3.24.3
         version: 3.24.3(zod@3.24.2)
     devDependencies:
+      '@thequinndev/db-manager':
+        specifier: workspace:*
+        version: link:src/db-manager
       '@types/jest':
         specifier: ^29.5.14
         version: 29.5.14
