@@ -5,7 +5,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "build:example:db-doc": "tsx examples/db-manager/document/index.ts"
   },
   "author": "",
   "license": "MIT",
