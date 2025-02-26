@@ -48,7 +48,6 @@ export const DocumentManager = <
   const processProperties = (schema: z.ZodAny): string[] => {
     const props: string[] = []
     const jsonSchema = zodToJsonSchema(schema) as any
-    console.log(jsonSchema)
     const dataType = jsonSchema.type ?? null
     if (dataType) {
         props.push(`\n\t* type: ${dataType}`)
