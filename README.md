@@ -165,7 +165,7 @@ const doc = documentManager.compile()
 writeFileSync(__dirname + '/doc.example.md', doc)
 ```
 ##### Document example
-A document example is included in ``examples/db-manager/document/doc.example.md``.
+A document example that was generated using [DocumentManager](examples/db-manager/document/index.ts) is included [here](examples/db-manager/document/doc.example.md)
 
 To generate it, run 
 ```
