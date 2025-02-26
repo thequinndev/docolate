@@ -1,0 +1,3 @@
+# Docolate
+Sweet documentation.
+
