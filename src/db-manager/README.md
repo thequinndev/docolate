@@ -1,6 +1,4 @@
 ## DB Manager
-The first module in Docolate (more planned). It is currently a work in progress. Requires zod: https://zod.dev/
-
 ### Module Intent
 <details>
   <summary>Click to expand</summary>
