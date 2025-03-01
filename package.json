@@ -2,29 +2,47 @@
   "name": "@thequinndev/docolate",
   "version": "0.0.1",
   "description": "",
-  "type": "module",
-  "main": "index.js",
+  "main": "dist/index.cjs",
+  "types": "dist/src/index.d.ts",
   "scripts": {
+    "build:esm": "npx esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js",
+    "build:cjs": "npx esbuild src/index.ts --bundle --platform=node --format=cjs --outfile=dist/index.cjs",
+    "build:tsc": "npx tsc -p ./tsconfig.build.json",
     "test": "vitest",
-    "build:example:db-doc": "tsx examples/db-manager/document/index.ts"
+    "generate:example:db-doc": "tsx examples/db-manager/document/index.ts",
+    "generate:migrate:1.0.0": "pnpm run build:cjs && docker-compose run migration-manager docolate-migrate build --prefix=20250301",
+    "generate:migrate:1.1.0": "pnpm run build:cjs && docker-compose run migration-manager docolate-migrate build --prefix=20250312"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "bin": {
+    "docolate-migrate": "./bin/docolate-migrate.cjs"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "yaml": "^2.7.0",
     "zod": "^3.24.2",
     "zod-to-json-schema": "^3.24.3"
   },
   "devDependencies": {
+    "@thequinndev/db-manager": "workspace:*",
+    "@thequinndev/migration-manager": "workspace:*",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.13.5",
     "@types/pg": "^8.11.11",
+    "esbuild": "^0.25.0",
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.0.1",
     "prettier": "^3.5.2",
+    "ts-node": "^10.9.2",
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.7",
-    "@thequinndev/db-manager": "workspace:*"
+    "vitest": "^3.0.7"
   }
 }
