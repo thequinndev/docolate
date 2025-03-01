@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  migration-manager:
+    build:
+      context: .
+      dockerfile: ./docker/migration-manager/Dockerfile
+    volumes:
+      - ./examples/migration-manager/docolate-migrate.yml:/usr/migration-manager/docolate-migrate.yml
+      - ./examples/migration-manager/migrations:/usr/migration-manager/migrations
+      - ./examples/migration-manager/docolate-migrate:/usr/migration-manager/docolate-migrate
+      - ./dist:/usr/local/lib/node_modules/@thequinndev/docolate/dist
+      - ./bin/docolate-migrate.cjs:/usr/local/lib/node_modules/@thequinndev/docolate/bin/docolate-migrate.cjs
+    
