@@ -1,0 +1,61 @@
+upRef: 1.0.0
+changeItemGroups:
+  - groupName: create_table_department
+    description: Departments table deployment
+    changeItems:
+      - up:
+          file:
+            fileName: tables/departments.sql
+        down:
+          cmd:
+            - DROP TABLE departments;
+
+      - up:
+          cmd:
+            - INSERT INTO TABLE departments (department_id department_name) VALUES (1 'Finance');
+        down:
+          cmd:
+            - DELETE FROM departments WHERE department_id = 1;
+
+  - groupName: create_table_employees
+    description: Employees table deployment
+    changeItems:
+      - up:
+          file:
+            fileName: tables/employees.sql
+        down:
+          cmd:
+            - DROP TABLE employees;
+
+  - groupName: create_view_employee_details_v
+    description: employee_details_v deployment
+    changeItems:
+      - up:
+          file:
+            fileName: views/employee_details_v.sql
+
+        down:
+          cmd:
+            - DROP VIEW employee_details_v;
+
+  - groupName: create_mat_view_employee_details_mv
+    description: employee_details_mv deployment
+    changeItems:
+      - up:
+          file:
+            fileName: mv/employee_details_mv.sql
+
+        down:
+          cmd:
+            - DROP MATERIALIZED VIEW employee_details_mv;
+
+  - groupName: create_function_get_employee_details
+    description: get_employee_details function deployment
+    changeItems:
+      - up:
+          file:
+            fileName: functions/get_employee_details.sql
+
+        down:
+          cmd:
+            - DROP FUNCTION get_employee_details(emp_id INT);

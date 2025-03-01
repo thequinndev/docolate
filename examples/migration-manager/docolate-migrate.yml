@@ -1,0 +1,6 @@
+prefixStrategy: date
+outputDir: migrations
+configDir: docolate-migrate
+migrationGroups:
+  - prefix: '20250301'
+  - prefix: '20250312'

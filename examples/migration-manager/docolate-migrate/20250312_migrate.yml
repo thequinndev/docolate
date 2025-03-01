@@ -1,0 +1,58 @@
+downRef: '1.0.0'
+upRef: '1.1.0'
+changeItemGroups: 
+  - groupName: 'update_table_departments'
+    description: "Departments table add location"
+    changeItems: 
+      - up: 
+          cmd: 
+            - ALTER TABLE departments ADD location VARCHAR(100) NOT NULL DEFAULT '';
+          
+        down: 
+          cmd: 
+            - ALTER TABLE departments DROP COLUMN location;
+          
+  - groupName: 'update_table_employees'
+    description: "Employees table add salary column"
+    changeItems: 
+      - up: 
+          cmd: 
+            - ALTER TABLE employees ADD salary DECIMAL(10 2) DEFAULT 0.00 NOT NULL;`
+        down: 
+          cmd: 
+            - ALTER TABLE employees DROP COLUMN salary;
+
+  - groupName: 'update_view_employee_details_v'
+    description: "employee_details_v update"
+    changeItems: 
+      - up: 
+          file: 
+            fileName: "views/employee_details_v.sql"
+
+        down: 
+          file: 
+            fileName: "views/employee_details_v.sql"
+          
+  - groupName: 'update_mat_view_employee_details_mv'
+    description: "employee_details_mv update"
+    changeItems: 
+      - up: 
+          pre: 'DROP MATERIALIZED VIEW employee_details_mv;'
+          file: 
+            fileName: "mv/employee_details_mv.sql"
+          
+        down: 
+          pre: 'DROP MATERIALIZED VIEW employee_details_mv;'
+          file: 
+            fileName: "mv/employee_details_mv.sql"
+          
+  - groupName: 'update_function_get_employee_details'
+    description: "get_employee_details function update"
+    changeItems: 
+      - up: 
+          file: 
+            fileName: "functions/get_employee_details.sql"
+          
+        down: 
+          file: 
+            fileName: "functions/get_employee_details.sql"
