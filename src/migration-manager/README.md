@@ -44,8 +44,8 @@ At this stage, you are free to alter any of the default directories, or change y
         * ``downFileFormat`` (optional) - string - default value: "{{prefix}}\_{{increment}}\_{{groupName}}.down.sql"
 #### splitBy
 What is the difference?
-* ``none`` - all of the groups change items will be merged into two single ``up.sql`` and ``down.sql`` files.
-* ``group`` - all the change items from each group will be placed in their own respective ``up.sql`` and ``down.sql`` files
+* ``none`` - all of the change item groups will be merged into two single ``up.sql`` and ``down.sql`` files.
+* ``group`` - all the change item groups will be placed in their own respective ``up.sql`` and ``down.sql`` files
 ##### splitBy custom file formats
 * ``prefix`` (``none`` & ``group``) - refers to the prefix designated for this changeset file
 * ``increment`` (``group`` only) - refers to a unique number starting from 0 and incrementing up
