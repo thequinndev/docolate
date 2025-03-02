@@ -124,11 +124,11 @@ For a working example see [here](../../examples/migration-manager/docolate-migra
 
 A changeItemGroup is a group with a list of changes that relate to a particular entity. These consist of ``up`` and ``down`` operations. These allow you to scope your do & un-do changes together.
 
-* groupName (required) string - a unique name that represents this group of changes
+* ``groupName`` (required) string - a unique name that represents this group of changes
     * if you split by group it will form part of the filename so make sure it's appropriate and consistent with a file name.
     * a good format might be (create|update|delete)_entityType_entityName
-description (optional) string - A description of the change group
-changeItems - an array of up and down operations
+* ``description`` (optional) string - A description of the change group
+* ``changeItems`` - an array of up and down operations
 
 #### Up and Down operations
 * Up operations will happen in normal order
