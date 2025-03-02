@@ -1,0 +1,7 @@
+description: description
+upRef: ref | null
+downRef: ref | undefined (remove this key entirely for undefined)
+changeItemGroups:
+  - groupName: my_migration_action
+    description: description
+    changeItems: []

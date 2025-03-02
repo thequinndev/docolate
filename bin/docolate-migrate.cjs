@@ -55,7 +55,6 @@ function buildChangeSet(action, args, dir) {
     };
     const config =
       docolate.MigrationManager.parseMigrationManagerConfig(freshStart);
-    delete config.splitBy;
     fs.writeFileSync(`${dir}/docolate-migrate.yml`, yaml.stringify(config));
     return;
   }
@@ -79,7 +78,7 @@ function buildChangeSet(action, args, dir) {
     const newGroupConfig = docolate.MigrationManager.parseChangesetConfigConfig({
       description: 'description',
       upRef: 'ref | null',
-      downRef: 'ref | undefined',
+      downRef: 'ref | undefined (remove this key entirely for undefined)',
       changeItemGroups: [{
           groupName: 'my_migration_action',
           description: 'description',
@@ -118,7 +117,7 @@ function buildChangeSet(action, args, dir) {
       fileName = makeFile(numeric)
     }
 
-    fs.writeFileSync(`${dir}/${config.configDir}/${fileName}`, yaml.stringify(newGroupConfig));
+    fs.writeFileSync(`${dir}/${config.migrationGroupsDir}/${fileName}`, yaml.stringify(newGroupConfig));
     fs.writeFileSync(ymlFileToUse, yaml.stringify(config));
 
     return;
@@ -137,7 +136,7 @@ function buildChangeSet(action, args, dir) {
       // Need to determine if .ts parsing in this context is even possible.
       // The success has been flaky. It works locally, but not in docker.
       // It may fix itself when the package becomes installable from npm later
-      const configFileTs = `${dir}/${config.configDir}/${target.prefix}_migrate.ts`;
+      const configFileTs = `${dir}/${config.migrationGroupsDir}/${target.prefix}_migrate.ts`;
       if (fs.existsSync(configFileTs)) {
         const changeSetConfig = require(configFileTs).changeSet;
         const parsed =
@@ -151,7 +150,7 @@ function buildChangeSet(action, args, dir) {
       }
 
       //yml case
-      const configFileYml = `${dir}/${config.configDir}/${target.prefix}_migrate.yml`;
+      const configFileYml = `${dir}/${config.migrationGroupsDir}/${target.prefix}_migrate.yml`;
       if (fs.existsSync(configFileYml)) {
         const changeSetConfig = yaml.parse(
           fs.readFileSync(configFileYml).toString()
@@ -168,7 +167,7 @@ function buildChangeSet(action, args, dir) {
         );
       }
       //yaml case
-      const configFileYaml = `${dir}/${config.configDir}/${target.prefix}_migrate.yaml`;
+      const configFileYaml = `${dir}/${config.migrationGroupsDir}/${target.prefix}_migrate.yaml`;
       if (fs.existsSync(configFileYaml)) {
         const changeSetConfig = yaml.parse(
           fs.readFileSync(configFileYaml).toString()

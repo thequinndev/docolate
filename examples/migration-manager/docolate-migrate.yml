@@ -1,6 +1,11 @@
 prefixStrategy: date
 outputDir: migrations
-configDir: docolate-migrate
+migrationGroupsDir: docolate-migrate
+splitBy:
+  none:
+    upFileFormat: "{{prefix}}.up.sql"
+    downFileFormat: "{{prefix}}.down.sql"
 migrationGroups:
-  - prefix: '20250215'
-  - prefix: '20250220'
+  - prefix: "20250215"
+  - prefix: "20250220"
+  - prefix: "20250302"

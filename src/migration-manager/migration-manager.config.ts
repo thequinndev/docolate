@@ -47,9 +47,9 @@ export const changesetConfigSchema = z.object({
 export type ChangesetConfig = z.input<typeof changesetConfigSchema>
 
 export const migrationManagerConfigSchema = z.object({
-    prefixStrategy: z.enum(['date', 'timestamp', 'numeric']).default('date'),
+    prefixStrategy: z.enum(['date', 'timestamp', 'numeric']).default('timestamp'),
     outputDir: z.string().default('migrations'),
-    configDir: z.string().default('docolate-migrate'),
+    migrationGroupsDir: z.string().default('docolate-migrate'),
     splitBy: z.object({
         none: z.object({
             upFileFormat: z.string().default('{{prefix}}.up.sql'),
