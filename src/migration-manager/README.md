@@ -100,11 +100,11 @@ changeItemGroups:
     changeItems: []
 
 ```
-* description (optional) - string - The description for your patch or migration
-* upRef (required) - string | null - The git ref that refers to the "up" (next/latest) target for your database. See ``"Valid refs"``
-* downRef (optional) - string | undefined - The git ref that refers to the "down" (rollback/revert) target for your database. See ``"Valid refs"``.
+* ``description`` (optional) - string - The description for your patch or migration
+* ``upRef`` (required) - string | null - The git ref that refers to the "up" (next/latest) target for your database. See ``"Valid refs"``
+* ``downRef`` (optional) - string | undefined - The git ref that refers to the "down" (rollback/revert) target for your database. See ``"Valid refs"``.
     * ``Remove this key entirely if there is no downRef``
-* changeItemGroups (required) - array of change items - See ``"Change items"``
+* ``changeItemGroups`` (required) - array of change items - See ``"Change items"``
 
 See ``"Additional customization"`` below for more available keys.
 
