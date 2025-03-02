@@ -30,8 +30,6 @@ const changeItemConfigSchema = z.object({
 export type ChangeItemConfig = z.input<typeof changeItemConfigSchema>
 
 export const changesetConfigSchema = z.object({
-    prefix: z.string().optional(),
-
     description: z.string().optional(),
     upRef: z.string().nullable(),
     downRef: z.string().optional(),
@@ -49,7 +47,7 @@ export const changesetConfigSchema = z.object({
 export type ChangesetConfig = z.input<typeof changesetConfigSchema>
 
 export const migrationManagerConfigSchema = z.object({
-    prefixStrategy: z.enum(['date', 'timestamp', 'numeric']),
+    prefixStrategy: z.enum(['date', 'timestamp', 'numeric']).default('date'),
     outputDir: z.string().default('migrations'),
     configDir: z.string().default('docolate-migrate'),
     splitBy: z.object({
@@ -60,8 +58,6 @@ export const migrationManagerConfigSchema = z.object({
         group: z.object({
             upFileFormat: z.string().optional().default('{{prefix}}_{{increment}}_{{groupName}}.up.sql'),
             downFileFormat: z.string().optional().default('{{prefix}}_{{increment}}_{{groupName}}.down.sql'),
-            includeGlobalPre: z.boolean().default(false).optional(),
-            includeGlobalPost: z.boolean().default(false).optional(),
         }).optional()
     }).optional()
     .default({
@@ -72,7 +68,7 @@ export const migrationManagerConfigSchema = z.object({
     }),
     migrationGroups: z.object({
         prefix: z.string()
-    }).array()
+    }).array().default([])
 })
 
 export type MigrationManagerConfig = z.infer<typeof migrationManagerConfigSchema>

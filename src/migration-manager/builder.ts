@@ -149,6 +149,7 @@ const makeChangesetFiles = (
   if (migrationConfig.splitBy?.group) {
     // Otherwise it will be by group
     let increment = 0;
+    const totalStart = outputConfig.groups.length - 1
 
     for (const group of outputConfig.groups) {
       const fileName =
@@ -159,7 +160,7 @@ const makeChangesetFiles = (
               .replace("{{groupName}}", group.groupName)
           : migrationConfig.splitBy?.group
               ?.downFileFormat!.replace("{{prefix}}", prefix)
-              .replace("{{increment}}", increment.toString())
+              .replace("{{increment}}", (totalStart - increment).toString())
               .replace("{{groupName}}", group.groupName);
 
       let finalOutput: string[] = [];
@@ -167,21 +168,13 @@ const makeChangesetFiles = (
       finalOutput.push(combineGroup(group, true, true));
       finalOutput = finalOutput.concat(outputConfig.post);
       outputFiles[fileName] = finalOutput.join(MigrationConstants.Padding);
+      increment++
     }
 
     return outputFiles;
   }
 
   return {};
-};
-
-// will be used for later action
-const buildPrefix = (config: ChangesetConfig) => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  return `${year}${month}${day}`;
 };
 
 export const buildChangeSet = (

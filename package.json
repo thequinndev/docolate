@@ -10,6 +10,8 @@
     "build:tsc": "npx tsc -p ./tsconfig.build.json",
     "test": "vitest",
     "generate:example:db-doc": "tsx examples/db-manager/document/index.ts",
+    "generate:migrate:new": "pnpm run build:cjs && docker-compose run migration-manager docolate-migrate new --prefixStrategy=timestamp",
+    "generate:migrate:add": "pnpm run build:cjs && docker-compose run migration-manager docolate-migrate add",
     "generate:migrate:1.0.0": "pnpm run build:cjs && docker-compose run migration-manager docolate-migrate build --prefix=20250301",
     "generate:migrate:1.1.0": "pnpm run build:cjs && docker-compose run migration-manager docolate-migrate build --prefix=20250312"
   },
