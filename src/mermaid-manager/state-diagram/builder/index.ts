@@ -1,13 +1,30 @@
 import { Mermaid } from "../../padding"
 
-export type StateBuilderConfig<Entities extends Record<string,string>> = {
+export type StateBuilderConfig<
+    Entities extends Record<string,string>,
+    Composites extends Record<string, CompositeBase>
+> = {
     entities: Entities,
+    composites?: Composites,
     settings?: {
         includeOrphans: boolean
     }
 }
 
 export type AvailableEntities<Entities extends Record<string,string>> = (keyof Entities) | '[*]'
+
+export type AvailableComposites<Composites extends Record<string, CompositeBase> | undefined> =
+Composites extends Record<string, CompositeBase> ? (keyof Composites) : never
+
+type CompositeBase = {
+    alias?: string,
+    entities: Record<string, string>
+}
+
+export type CompositeEntitiesByKey<
+    Composites extends Record<string, CompositeBase>,
+    Key extends AvailableComposites<Composites>
+> = AvailableEntities<Composites[Key]['entities']>
 
 type BaseItem<T extends string> = {
     type: T
@@ -21,27 +38,59 @@ export type EntityRelationshipItem = BaseItem<'entity'> & {
     relationshipDescription?: string,
 }
 
+export type CompositeRelationshipItem = BaseItem<'composite'> & {
+    from: string,
+    fromDescriptor: string | null,
+    to: string,
+    toDescriptor: string | null,
+    relationshipDescription?: string,
+}
+
+export type ValidTypes = EntityRelationshipItem['type'] | CompositeRelationshipItem['type']
+
 export const StateDiagramBuilder = <
-    Entities extends Record<string,string>
->(config: StateBuilderConfig<Entities>) => {
+    Entities extends Record<string,string>,
+    EntityKeys extends AvailableEntities<Entities>,
+    Composites extends Record<string, CompositeBase>,
+    CompositeKeys extends AvailableComposites<Composites>,
+>(config: StateBuilderConfig<Entities, Composites>) => {
 
-    const diagramItems: (EntityRelationshipItem)[] = []
+    const entityItems: EntityRelationshipItem[] = []
+    const compositeItems: CompositeRelationshipItem[] = []
 
-    const getDescriptor = (key: AvailableEntities<Entities>): string | null => {
+    const allTopLevelEntities: Record<string, string | null> = {...config.entities}
+    for (const compositeKey in config.composites ?? {}) {
+        allTopLevelEntities[compositeKey] = config.composites![compositeKey].alias ?? null
+    }
+
+    const getDescriptor = (key: string): string | null => {
         if (key === '[*]') {
             return null
         }
 
-        return config.entities[key]
+        return allTopLevelEntities[key]
     }
 
-    const addEntityRelationship = (from: AvailableEntities<Entities>, to: AvailableEntities<Entities>, relationshipDescription?: string) => {
-        diagramItems.push({
+    const addEntityRelationship = (from: EntityKeys, to: EntityKeys, relationshipDescription?: string) => {
+        entityItems.push({
             type: 'entity',
             from: from as string,
-            fromDescriptor: getDescriptor(from),
+            fromDescriptor: getDescriptor(from as string),
             to: to as string,
-            toDescriptor: getDescriptor(to),
+            toDescriptor: getDescriptor(to as string),
+            ...(
+                relationshipDescription ? {relationshipDescription} : {}
+            )
+        })
+    }
+
+    const addCompositeRelationship = <CompositeKeys, CompositeEntityKeys>(fromComposite: CompositeKeys, from: CompositeEntityKeys, to: CompositeEntityKeys, relationshipDescription?: string) => {
+        compositeItems.push({
+            type: 'composite',
+            from: from as string,
+            fromDescriptor: getDescriptor(from as string),
+            to: to as string,
+            toDescriptor: getDescriptor(to as string),
             ...(
                 relationshipDescription ? {relationshipDescription} : {}
             )
@@ -52,7 +101,7 @@ export const StateDiagramBuilder = <
         const header: Record<string, string> = {}
         const relations: string[] = []
 
-        for (const item of diagramItems) {
+        for (const item of entityItems) {
             if (item.from !== '[*]') {
                 header[item.from] = `${Mermaid.tab}${item.from}: ${item.fromDescriptor}`
             }
@@ -70,7 +119,7 @@ export const StateDiagramBuilder = <
         return `\`\`\`mermaid\nstateDiagram-v2\n${diagramBody}\n\`\`\``
     }
 
-    const fromTo = (from: AvailableEntities<Entities>, to: AvailableEntities<Entities>, relationshipDescription?: string) => {
+    const fromToEntity = (from: EntityKeys, to: EntityKeys, relationshipDescription?: string) => {
         addEntityRelationship(
             from,
             to,
@@ -78,23 +127,60 @@ export const StateDiagramBuilder = <
         )
     }
 
-    const buildCallback = (lastFrom: AvailableEntities<Entities>) => {
-        return (newTo: AvailableEntities<Entities>, newDescription?: string) => {
-            fromTo(lastFrom, newTo, newDescription)
+    const fromToComposite = <CompositeKeys, CompositeEntityKeys>(fromComposite: CompositeKeys, from: CompositeEntityKeys, to: CompositeEntityKeys, relationshipDescription?: string) => {
+        addCompositeRelationship(
+            fromComposite,
+            from,
+            to,
+            relationshipDescription
+        )
+    }
+
+    const beginWith = (currentEntity: EntityKeys) => {
+        return {
+            to: buildEntityCallback(currentEntity),
+        }
+    }
+
+    const buildEntityCallback = (lastFrom: EntityKeys) => {
+        return (newTo: EntityKeys, newDescription?: string) => {
+            fromToEntity(lastFrom, newTo, newDescription)
             return {
-                to: buildCallback(newTo),
+                to: buildEntityCallback(newTo),
                 compile
             }
         }
     }
 
-    const beginWith = (currentEntity: AvailableEntities<Entities>) => {
+    const buildCompositeCallback = <
+        CompositeKey extends CompositeKeys,
+        CompositeEntityKeys extends CompositeEntitiesByKey<Composites, CompositeKey>
+    >(lastFromComposite: CompositeKey, lastFrom?: CompositeEntityKeys) => {
+        return (newTo: CompositeEntityKeys, newDescription?: string) => {
+            if (lastFrom) {
+                fromToComposite<CompositeKey, CompositeEntityKeys>(lastFromComposite, lastFrom, newTo, newDescription)
+            }
+            
+            return {
+                to: buildCompositeCallback(lastFromComposite, newTo),
+            }
+        }
+    }
+
+    const buildComposite = <CompositeKey extends CompositeKeys>(composite: CompositeKey) => {
+        const beginWith = <CompositeEntityKeys extends CompositeEntitiesByKey<Composites, CompositeKey>>(currentEntity: CompositeEntityKeys) => {
+            return {
+                to: buildCompositeCallback(composite),
+            }
+        }
         return {
-            to: buildCallback(currentEntity),
+            beginWith
         }
     }
 
     return {
-        beginWith
+        beginWith,
+        buildComposite,
+        compile
     }
 }
