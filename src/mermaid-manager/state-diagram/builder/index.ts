@@ -13,7 +13,7 @@ type BaseItem<T extends string> = {
     type: T
 }
 
-export type RelationshipItem = BaseItem<'entity'> & {
+export type EntityRelationshipItem = BaseItem<'entity'> & {
     from: string,
     fromDescriptor: string | null,
     to: string,
@@ -25,7 +25,7 @@ export const StateDiagramBuilder = <
     Entities extends Record<string,string>
 >(config: StateBuilderConfig<Entities>) => {
 
-    const diagramItems: (RelationshipItem)[] = []
+    const diagramItems: (EntityRelationshipItem)[] = []
 
     const getDescriptor = (key: AvailableEntities<Entities>): string | null => {
         if (key === '[*]') {
@@ -35,7 +35,7 @@ export const StateDiagramBuilder = <
         return config.entities[key]
     }
 
-    const addToRelationship = (from: AvailableEntities<Entities>, to: AvailableEntities<Entities>, relationshipDescription?: string) => {
+    const addEntityRelationship = (from: AvailableEntities<Entities>, to: AvailableEntities<Entities>, relationshipDescription?: string) => {
         diagramItems.push({
             type: 'entity',
             from: from as string,
@@ -71,7 +71,7 @@ export const StateDiagramBuilder = <
     }
 
     const fromTo = (from: AvailableEntities<Entities>, to: AvailableEntities<Entities>, relationshipDescription?: string) => {
-        addToRelationship(
+        addEntityRelationship(
             from,
             to,
             relationshipDescription
