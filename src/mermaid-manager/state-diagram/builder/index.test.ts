@@ -40,7 +40,7 @@ describe('StateDiagramBuilder', () => {
                 }
             })
             
-            testBuilder.buildComposite('comp1').beginWith('[*]').to('comp1A').to('comp1B')
+            testBuilder.buildComposite('comp1').beginWith('comp1A').to('comp1B')
             testBuilder.buildComposite('comp2').beginWith('comp2A').to('comp2B')
             
             testBuilder.beginWith('[*]').to('A').to('B')

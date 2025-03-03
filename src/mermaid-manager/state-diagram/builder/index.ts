@@ -52,7 +52,7 @@ export const StateDiagramBuilder = <
     Entities extends Record<string,string>,
     EntityKeys extends AvailableEntities<Entities>,
     Composites extends Record<string, CompositeBase>,
-    CompositeKeys extends AvailableComposites<Composites>,
+    CompositeKeys extends AvailableComposites<Composites>
 >(config: StateBuilderConfig<Entities, Composites>) => {
 
     const entityItems: EntityRelationshipItem[] = []
@@ -84,7 +84,7 @@ export const StateDiagramBuilder = <
         })
     }
 
-    const addCompositeRelationship = <CompositeKeys, CompositeEntityKeys>(fromComposite: CompositeKeys, from: CompositeEntityKeys, to: CompositeEntityKeys, relationshipDescription?: string) => {
+    const addCompositeRelationship = <CompositeKey extends CompositeKeys>(fromComposite: CompositeKeys, from: CompositeEntitiesByKey<Composites, CompositeKey>, to: CompositeEntitiesByKey<Composites, CompositeKey>, relationshipDescription?: string) => {
         compositeItems.push({
             type: 'composite',
             from: from as string,
@@ -127,7 +127,7 @@ export const StateDiagramBuilder = <
         )
     }
 
-    const fromToComposite = <CompositeKeys, CompositeEntityKeys>(fromComposite: CompositeKeys, from: CompositeEntityKeys, to: CompositeEntityKeys, relationshipDescription?: string) => {
+    const fromToComposite = <CompositeKey extends CompositeKeys>(fromComposite: CompositeKeys, from: CompositeEntitiesByKey<Composites, CompositeKey>, to: CompositeEntitiesByKey<Composites, CompositeKey>, relationshipDescription?: string) => {
         addCompositeRelationship(
             fromComposite,
             from,
@@ -152,15 +152,11 @@ export const StateDiagramBuilder = <
         }
     }
 
-    const buildCompositeCallback = <
-        CompositeKey extends CompositeKeys,
-        CompositeEntityKeys extends CompositeEntitiesByKey<Composites, CompositeKey>
-    >(lastFromComposite: CompositeKey, lastFrom?: CompositeEntityKeys) => {
-        return (newTo: CompositeEntityKeys, newDescription?: string) => {
-            if (lastFrom) {
-                fromToComposite<CompositeKey, CompositeEntityKeys>(lastFromComposite, lastFrom, newTo, newDescription)
-            }
-            
+    const buildCompositeCallback = <CompositeKey extends CompositeKeys>(lastFromComposite: CompositeKey, lastFrom: CompositeEntitiesByKey<Composites, CompositeKey>) => {
+        return (newTo: CompositeEntitiesByKey<Composites, CompositeKey>, newDescription?: string) => {
+
+            fromToComposite<CompositeKey>(lastFromComposite, lastFrom, newTo, newDescription)
+        
             return {
                 to: buildCompositeCallback(lastFromComposite, newTo),
             }
@@ -168,9 +164,9 @@ export const StateDiagramBuilder = <
     }
 
     const buildComposite = <CompositeKey extends CompositeKeys>(composite: CompositeKey) => {
-        const beginWith = <CompositeEntityKeys extends CompositeEntitiesByKey<Composites, CompositeKey>>(currentEntity: CompositeEntityKeys) => {
+        const beginWith = (currentEntity: CompositeEntitiesByKey<Composites, CompositeKey>) => {
             return {
-                to: buildCompositeCallback(composite),
+                to: buildCompositeCallback<CompositeKey>(composite, currentEntity),
             }
         }
         return {
