@@ -25,27 +25,32 @@ describe('StateDiagramBuilder', () => {
                     'B': 'Entity B',
                 },
                 composites: {
-                    'comp1': {
+                    'First': {
+                        alias: 'First',
+                        entities: {}
+                    },
+                    'Second': {
+                        alias: 'Second',
                         entities: {
-                            'comp1A': 'Composite 1 Entity A',
-                            'comp1B': 'Composite 1 Entity B'
+                            'second': 'sec',
                         }
                     },
-                    'comp2': {
+                    'Third': {
+                        alias: 'Third',
                         entities: {
-                            'comp2A': 'Composite 2 Entity A',
-                            'comp2B': 'Composite 2 Entity B'
+                            'third': 'third',
                         }
                     },
                 }
             })
             
-            testBuilder.buildComposite('comp1').beginWith('comp1A').to('comp1B')
-            testBuilder.buildComposite('comp2').beginWith('comp2A').to('comp2B')
+            testBuilder.buildComposite('First').beginWith('[*]').to('Second')
+            testBuilder.buildComposite('Second').beginWith('[*]').to('second').to('Third')
+            testBuilder.buildComposite('Third').beginWith('[*]').to('third').to('[*]')
             
-            testBuilder.beginWith('[*]').to('A').to('B')
+            testBuilder.beginWith('[*]').to('First')
             const diagram = testBuilder.compile()
-            expect(diagram).toEqual(readFileSync(__dirname + '/test.scenario1.md').toString())
+            expect(diagram).toEqual('')
         })
     })
 })

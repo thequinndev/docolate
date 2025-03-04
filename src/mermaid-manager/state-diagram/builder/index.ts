@@ -119,10 +119,10 @@ export const StateDiagramBuilder = <
         return `\`\`\`mermaid\nstateDiagram-v2\n${diagramBody}\n\`\`\``
     }
 
-    const fromToEntity = (from: EntityKeys, to: EntityKeys, relationshipDescription?: string) => {
+    const fromToEntity = <Keys>(from: Keys, to: Keys, relationshipDescription?: string) => {
         addEntityRelationship(
-            from,
-            to,
+            from as unknown as EntityKeys,
+            to as unknown as EntityKeys,
             relationshipDescription
         )
     }
@@ -136,15 +136,15 @@ export const StateDiagramBuilder = <
         )
     }
 
-    const beginWith = (currentEntity: EntityKeys) => {
+    const beginWith = (currentEntity: EntityKeys | CompositeKeys) => {
         return {
-            to: buildEntityCallback(currentEntity),
+            to: buildEntityCallback<EntityKeys | CompositeKeys>(currentEntity),
         }
     }
 
-    const buildEntityCallback = (lastFrom: EntityKeys) => {
-        return (newTo: EntityKeys, newDescription?: string) => {
-            fromToEntity(lastFrom, newTo, newDescription)
+    const buildEntityCallback = <Keys>(lastFrom: Keys) => {
+        return (newTo: Keys, newDescription?: string) => {
+            fromToEntity<Keys>(lastFrom, newTo, newDescription)
             return {
                 to: buildEntityCallback(newTo),
                 compile
