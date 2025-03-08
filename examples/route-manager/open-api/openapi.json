@@ -8,8 +8,10 @@
     "/": {
       "description": "The API Documentation",
       "get": {
+        "operationId": "getApiDocumentation",
         "responses": {
           "200": {
+            "description": "Current API metadata for this version",
             "content": {
               "application/json": {
                 "schema": {
@@ -28,7 +30,7 @@
                     },
                     "apiDocumentation": {
                       "type": "string",
-                      "const": "my-website"
+                      "format": "uri"
                     }
                   },
                   "required": [
@@ -41,6 +43,7 @@
             }
           },
           "400": {
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -66,6 +69,7 @@
             }
           },
           "404": {
+            "description": "Resource not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -91,11 +95,14 @@
             }
           },
           "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "const": "Internal Server Error"
+                  "enum": [
+                    "Internal Server Error"
+                  ]
                 }
               }
             }
@@ -106,6 +113,7 @@
     "/users/{userId}": {
       "description": "Get a user by their User ID",
       "get": {
+        "operationId": "getUserById",
         "parameters": [
           {
             "in": "path",
@@ -118,6 +126,7 @@
         ],
         "responses": {
           "200": {
+            "description": "Successfully retrieved the user",
             "content": {
               "application/json": {
                 "schema": {
@@ -143,6 +152,7 @@
             }
           },
           "400": {
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -168,6 +178,7 @@
             }
           },
           "404": {
+            "description": "Resource not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -193,11 +204,14 @@
             }
           },
           "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "const": "Internal Server Error"
+                  "enum": [
+                    "Internal Server Error"
+                  ]
                 }
               }
             }
@@ -205,6 +219,7 @@
         }
       },
       "put": {
+        "operationId": "updateUser",
         "requestBody": {
           "content": {
             "application/json": {
@@ -242,6 +257,7 @@
         ],
         "responses": {
           "200": {
+            "description": "Successfully updated the user",
             "content": {
               "application/json": {
                 "schema": {
@@ -267,6 +283,7 @@
             }
           },
           "400": {
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -292,6 +309,7 @@
             }
           },
           "404": {
+            "description": "Resource not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -317,11 +335,14 @@
             }
           },
           "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "const": "Internal Server Error"
+                  "enum": [
+                    "Internal Server Error"
+                  ]
                 }
               }
             }
@@ -332,6 +353,7 @@
     "/users": {
       "description": "Search for users by their name or description",
       "get": {
+        "operationId": "searchUsers",
         "parameters": [
           {
             "in": "query",
@@ -366,6 +388,7 @@
         ],
         "responses": {
           "200": {
+            "description": "Successfully retrieved a list of users",
             "content": {
               "application/json": {
                 "schema": {
@@ -395,6 +418,7 @@
             }
           },
           "400": {
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -420,6 +444,7 @@
             }
           },
           "404": {
+            "description": "Resource not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -445,11 +470,14 @@
             }
           },
           "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "const": "Internal Server Error"
+                  "enum": [
+                    "Internal Server Error"
+                  ]
                 }
               }
             }
@@ -457,11 +485,8 @@
         }
       },
       "post": {
+        "operationId": "createUser",
         "requestBody": {
-          "example": {
-            "name": "John Smith",
-            "description": "A new user"
-          },
           "content": {
             "application/json": {
               "schema": {
@@ -478,12 +503,17 @@
                   "name",
                   "description"
                 ]
+              },
+              "example": {
+                "name": "John Smith",
+                "description": "A new user"
               }
             }
           }
         },
         "responses": {
           "200": {
+            "description": "Successfully created the user",
             "content": {
               "application/json": {
                 "schema": {
@@ -509,6 +539,7 @@
             }
           },
           "400": {
+            "description": "Bad request",
             "content": {
               "application/json": {
                 "schema": {
@@ -534,6 +565,7 @@
             }
           },
           "404": {
+            "description": "Resource not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -559,11 +591,14 @@
             }
           },
           "500": {
+            "description": "Internal server error",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "string",
-                  "const": "Internal Server Error"
+                  "enum": [
+                    "Internal Server Error"
+                  ]
                 }
               }
             }

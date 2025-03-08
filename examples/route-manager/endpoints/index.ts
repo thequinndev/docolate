@@ -8,6 +8,8 @@ const errorSchema = z.object({
     message: z.string(),
 })
 
+const error500 = z.enum(['Internal Server Error'])
+
 const apiDocumentationSchema = z.object({
     apiVersion: z.string(),
     apiStatus: z.enum(['active', 'deprecated', 'inactive']),
@@ -22,7 +24,7 @@ const getApiDocumentation = routeManager.endpoint({
         200: apiDocumentationSchema,
         400: errorSchema.array(),
         404: errorSchema.array(),
-        500: z.literal('Internal Server Error')
+        500: error500
     }
 })
 
@@ -45,7 +47,7 @@ const getUserById = routeManager.endpoint({
         200: userSchema,
         400: errorSchema.array(),
         404: errorSchema.array(),
-        500: z.literal('Internal Server Error')
+        500: error500
     }
 })
 
@@ -63,7 +65,7 @@ const searchUsers = routeManager.endpoint({
         200: userSchema.array(),
         400: errorSchema.array(),
         404: errorSchema.array(),
-        500: z.literal('Internal Server Error')
+        500: error500
     }
 })
 
@@ -78,7 +80,7 @@ const createUser = routeManager.endpoint({
         200: userSchema,
         400: errorSchema.array(),
         404: errorSchema.array(),
-        500: z.literal('Internal Server Error')
+        500: error500
     }
 })
 
@@ -96,7 +98,7 @@ const updateUser = routeManager.endpoint({
         200: userSchema,
         400: errorSchema.array(),
         404: errorSchema.array(),
-        500: z.literal('Internal Server Error')
+        500: error500
     }
 })
 

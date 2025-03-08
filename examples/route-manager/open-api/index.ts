@@ -12,6 +12,19 @@ const document = OpenAPIManager({
             title: 'OpenAPIManager Example',
             version: '1.0.0'
         }
+    },
+    defaultMetadata: {
+        responses: {
+            400: {
+                description: 'Bad request'
+            },
+            404: {
+                description: 'Resource not found'
+            },
+            500: {
+                description: 'Internal server error'
+            }
+        }
     }
 });
 
@@ -19,12 +32,22 @@ document.addEndpointGroup(apiDocumentationEndpoints)
 .withAnnotation('getApiDocumentation', {
     path: {
         description: 'The API Documentation'
+    },
+    responses: {
+        200: {
+            description: 'Current API metadata for this version'
+        },
     }
 })
 .addEndpointGroup(userEndpoints)
 .withAnnotation('createUser', {
     path: {
         description: 'Create a new user'
+    },
+    responses: {
+        200: {
+            description: 'Successfully created the user'
+        },
     },
     requestBody: {
         example: {
@@ -37,18 +60,35 @@ document.addEndpointGroup(apiDocumentationEndpoints)
 .withAnnotation('getUserById', {
     path: {
         description: 'Get a user by their User ID'
+    },
+    responses: {
+        200: {
+            description: 'Successfully retrieved the user'
+        },
     }
 })
 .withAnnotation('searchUsers', {
     path: {
         description: 'Search for users by their name or description'
+    },
+    responses: {
+        200: {
+            description: 'Successfully retrieved a list of users'
+        },
     }
 })
 .withAnnotation('updateUser', {
     path: {
         description: 'Update a user by their User ID'
+    },
+    responses: {
+        200: {
+            description: 'Successfully updated the user'
+        },
     }
 })
 
-const apiSpec = document.build()
+const apiSpec = document.build({
+    failOnError: true,
+})
 writeFileSync(__dirname + '/openapi.json', JSON.stringify(apiSpec, null, 2))

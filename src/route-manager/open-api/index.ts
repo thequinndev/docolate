@@ -1,5 +1,5 @@
-import { buildEndpointBody } from "../build-endpoint";
-import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts } from "../endpoint";
+import { apiBuilder } from "../build-endpoint";
+import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts, ValidStatusCodes } from "../endpoint";
 import { oas30, oas31 } from 'openapi3-ts'
 
 type OASVersions = '3.0' | '3.1'
@@ -18,12 +18,19 @@ type GetRequestBodySpecMeta<Version extends OASVersions, T> = (Pick<Version exte
     }
 } : {}
 
+type GetResponseSpecMeta<Version extends OASVersions> = {
+    [Status in ValidStatusCodes]?: Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'>
+}
+
 export const OpenAPIManager = <
     SpecVersion extends OASVersions,
     SpecBodyVersion extends InferSpecBodyFromVersion<SpecVersion>
 >(config: {
     version: SpecVersion,
-    specFile: SpecBodyVersion
+    specFile: SpecBodyVersion,
+    defaultMetadata?: {
+        responses?: GetResponseSpecMeta<SpecVersion>
+    } 
 }) => {
     const documentAnnotations: any = {}
     let endpointGroupList: any = {}
@@ -37,7 +44,8 @@ export const OpenAPIManager = <
             RequestBody extends InferRequestAccepts<Operation['accepts'], 'body'>
         >(operationId: OperationId, annotations: {
             path?: GetPathSpecMeta<SpecVersion>,
-            requestBody?: GetRequestBodySpecMeta<SpecVersion, RequestBody>
+            requestBody?: GetRequestBodySpecMeta<SpecVersion, RequestBody>,
+            responses?: GetResponseSpecMeta<SpecVersion>
         }) => {
             documentAnnotations[operationId as string] = annotations
 
@@ -56,19 +64,14 @@ export const OpenAPIManager = <
         }
     }
 
-    const build = () => {
-        let paths = {} as any
-        for (const operationId in endpointGroupList) {
-            const endpoint = endpointGroupList[operationId]
-            paths = buildEndpointBody(paths, endpoint, documentAnnotations[operationId] ?? undefined)
-        }
-
-        const apiFile = {
-            ...config.specFile,
-            paths
-        }
-
-        return apiFile
+    const build = (buildConfig: {
+        failOnError?: boolean,
+    }) => {
+        const builder = apiBuilder({
+            failOnError: buildConfig.failOnError ?? false,
+            defaultMetadata: config.defaultMetadata ?? {}
+        })
+        return builder.newSpecFile(config.specFile, endpointGroupList, documentAnnotations)
     }
 
     return {
