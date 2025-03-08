@@ -20,7 +20,7 @@ importers:
         version: link:src/db-manager
       '@thequinndev/route-manager':
         specifier: workspace:*
-        version: link:src/router-manager
+        version: link:src/route-manager
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.0
@@ -60,7 +60,7 @@ importers:
 
   src/db-manager: {}
 
-  src/router-manager: {}
+  src/route-manager: {}
 
 packages:
 
