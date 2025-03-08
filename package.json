@@ -11,6 +11,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "openapi3-ts": "^4.4.0",
     "zod": "^3.24.2",
     "zod-to-json-schema": "^3.24.3"
   },

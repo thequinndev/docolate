@@ -64,3 +64,24 @@ userRouter.operation('getUserById', (req, res) => {
         return res.status(500).json('Internal Server Error')
     }
 })
+
+userRouter.operation('createUser', (req, res) => {
+    try {
+        if (!req.body) {
+            return res.status(400).json([{
+                code: 'BAD_REQUEST',
+                message: 'Invalid request.'
+            }])
+        }
+    
+        return res.status(200).json(
+            {   
+                id: 1,
+                description: 'Test',
+                name: 'Test'
+            }
+        )
+    } catch (error) {
+        return res.status(500).json('Internal Server Error')
+    }
+})

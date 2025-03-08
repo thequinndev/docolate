@@ -1,5 +1,7 @@
-import { makeEndpoint, endpointGroup } from '@thequinndev/route-manager/endpoint'
+import { RouteManager } from '@thequinndev/route-manager/endpoint'
 import { z } from 'zod'
+
+const routeManager = RouteManager()
 
 const errorSchema = z.object({
     code: z.string(),
@@ -12,7 +14,7 @@ const apiDocumentationSchema = z.object({
     apiDocumentation: z.string().url(),
 })
 
-const getApiDocumentation = makeEndpoint({
+const getApiDocumentation = routeManager.endpoint({
     operationId: 'getApiDocumentation',
     path: '/',
     method: 'get',
@@ -30,7 +32,7 @@ const userSchema = z.object({
     description: z.string(),
 })
 
-const getUserById = makeEndpoint({
+const getUserById = routeManager.endpoint({
     operationId: 'getUserById',
     path: '/users/{userId}',
     method: 'get',
@@ -47,7 +49,7 @@ const getUserById = makeEndpoint({
     }
 })
 
-const searchUsers = makeEndpoint({
+const searchUsers = routeManager.endpoint({
     operationId: 'searchUsers',
     path: '/users',
     method: 'get',
@@ -65,7 +67,7 @@ const searchUsers = makeEndpoint({
     }
 })
 
-const createUser = makeEndpoint({
+const createUser = routeManager.endpoint({
     operationId: 'createUser',
     path: '/users',
     method: 'post',
@@ -80,7 +82,7 @@ const createUser = makeEndpoint({
     }
 })
 
-const updateUser = makeEndpoint({
+const updateUser = routeManager.endpoint({
     operationId: 'updateUser',
     path: '/users/{userId}',
     method: 'put',
@@ -98,11 +100,11 @@ const updateUser = makeEndpoint({
     }
 })
 
-export const apiDocumentationEndpoints = endpointGroup([
+export const apiDocumentationEndpoints = routeManager.endpointGroup([
     getApiDocumentation
 ])
 
-export const userEndpoints = endpointGroup([
+export const userEndpoints = routeManager.endpointGroup([
     getUserById,
     searchUsers,
     createUser,
