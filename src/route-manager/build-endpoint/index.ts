@@ -2,7 +2,7 @@ import { z } from "zod";
 import { EndpointBase } from "../endpoint";
 import { SchemaProcessor } from "../schema-process";
 
-type Errors = {
+export type Error = {
     path: string,
     operationId: string,
     method: string,
@@ -15,7 +15,7 @@ export const apiBuilder = (config: {
     defaultMetadata: any
 }) => {
 
-    let errors: Errors[] = []
+    let errors: Error[] = []
     let apiPaths: any = {}
 
     const schemaProcessor = SchemaProcessor()
@@ -24,7 +24,7 @@ export const apiBuilder = (config: {
         throw new Error(JSON.stringify(errors[errors.length - 1], null, 2))
     }
 
-    const addErrorMessage = (endpoint: EndpointBase, message: string, severity: Errors['severity']) => {
+    const addErrorMessage = (endpoint: EndpointBase, message: string, severity: Error['severity']) => {
         errors.push({
             'message': message,
             'operationId': endpoint.operationId,
@@ -124,7 +124,7 @@ export const apiBuilder = (config: {
         }
     }
     
-    const newSpecFile = (specFile: any, endpointGroupList: any, documentAnnotations: any) => {
+    const newSpecFile = (endpointGroupList: any, documentAnnotations: any) => {
         apiPaths = {}
         errors = []
 
@@ -134,7 +134,6 @@ export const apiBuilder = (config: {
         }
 
         return {
-            ...specFile,
             ...schemaProcessor.getComponents(),
             paths: {
                 ...apiPaths
@@ -174,8 +173,13 @@ export const apiBuilder = (config: {
         }
     }
 
+    const getErrors = () => {
+        return errors
+    }
+
     return {
         buildEndpointBody,
         newSpecFile,
+        getErrors
     }
 }
