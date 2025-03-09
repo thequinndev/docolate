@@ -1,4 +1,4 @@
-import { ApiDocumentExample, UserDocumentExample } from "../../../../examples/route-manager/openapi/manager"
+import { ApiDocumentExample, UserDocumentExample, MissingDocsExample } from "../../../../examples/route-manager/openapi/manager"
 
 describe("OpenAPIManager", () => {
   it('Will build ApiDocumentExample', () => {
@@ -592,4 +592,10 @@ describe("OpenAPIManager", () => {
         },
       })
   })
+
+  it('Will return errors for MissingDocsExample in failOnError: false', () => {
+    const result = MissingDocsExample.build({failOnError: false})
+    expect(result.errors).toEqual([])
+  })
+
 });
