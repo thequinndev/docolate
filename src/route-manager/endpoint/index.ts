@@ -98,14 +98,9 @@ export const RouteManager = () => {
   };
 
   const endpointGroup = <Endpoints extends EndpointBase[]>(
-    endpoints: Endpoints,
-    groupPath?: PathItem
+    endpoints: Endpoints
   ): EndpointArrayByOperationIds<Endpoints> => {
     return endpoints.reduce((acc, endpoint) => {
-      if (groupPath) {
-        endpoint.path = `${groupPath}${endpoint.path}`;
-      }
-  
       //@ts-ignore - This is valid
       acc[endpoint.operationId] = endpoint;
       return acc;
