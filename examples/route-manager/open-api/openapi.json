@@ -493,6 +493,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                },
+                "example": {
+                  "id": 1,
+                  "name": "John Smith",
+                  "description": "A new user"
                 }
               }
             }

@@ -46,7 +46,12 @@ document.addEndpointGroup(apiDocumentationEndpoints)
     },
     responses: {
         200: {
-            description: 'Successfully created the user'
+            description: 'Successfully created the user',
+            example: {
+                id: 1,
+                name: 'John Smith',
+                description: 'A new user'
+            }
         },
     },
     requestBody: {

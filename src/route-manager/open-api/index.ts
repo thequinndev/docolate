@@ -1,5 +1,6 @@
+import { z } from "zod";
 import { apiBuilder } from "../build-endpoint";
-import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts, ValidStatusCodes } from "../endpoint";
+import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts, InferResponses, StatusCodeRecord, ValidStatusCodes } from "../endpoint";
 import { oas30, oas31 } from 'openapi3-ts'
 
 type OASVersions = '3.0' | '3.1'
@@ -18,9 +19,24 @@ type GetRequestBodySpecMeta<Version extends OASVersions, T> = (Pick<Version exte
     }
 } : {}
 
-type GetResponseSpecMeta<Version extends OASVersions> = {
+type GetResponseSpecMetaDefault<Version extends OASVersions> = {
     [Status in ValidStatusCodes]?: Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'>
 }
+
+
+type InferResponsesForExamples<
+Version extends OASVersions,
+Endpoint extends EndpointBase
+> = Endpoint['returns'] extends StatusCodeRecord ? {
+    [Status in keyof Endpoint['returns'] as Status]?: Endpoint['returns'][Status] extends z.ZodType<any>
+    ? Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'> & {
+        example?: z.infer<Endpoint['returns'][Status]>,
+        examples?: {
+            [name: string]: z.infer<Endpoint['returns'][Status]>
+        }
+    } : never
+} : never
+
 
 export type ValidRefFormat = `#/components/${string}`
 
@@ -36,7 +52,7 @@ export const OpenAPIManager = <
     version: SpecVersion,
     specFile: SpecBodyVersion,
     defaultMetadata?: {
-        responses?: GetResponseSpecMeta<SpecVersion>
+        responses?: GetResponseSpecMetaDefault<SpecVersion>
     }
 }) => {
     const documentAnnotations: any = {}
@@ -48,11 +64,12 @@ export const OpenAPIManager = <
         const withAnnotation = <
             OperationId extends keyof Operations,
             Operation extends Operations[OperationId],
-            RequestBody extends InferRequestAccepts<Operation['accepts'], 'body'>
+            RequestBody extends InferRequestAccepts<Operation['accepts'], 'body'>,
+            Responses extends Omit<InferResponses<Operation>, 'defaultSuccess'>
         >(operationId: OperationId, annotations: {
             path?: GetPathSpecMeta<SpecVersion>,
             requestBody?: GetRequestBodySpecMeta<SpecVersion, RequestBody>,
-            responses?: GetResponseSpecMeta<SpecVersion>
+            responses?: InferResponsesForExamples<SpecVersion, Operation>
         }) => {
             documentAnnotations[operationId as string] = annotations
 

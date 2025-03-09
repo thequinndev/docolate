@@ -10,7 +10,7 @@ export type AnchoredSchema<T> = z.ZodType<any> & {
   describe: (description: T) => ReturnType<z.ZodType<any>['describe']>
 }
 
-type StatusCodeRecord = Partial<Record<ValidStatusCodes, z.ZodType<any>>>
+export type StatusCodeRecord = Partial<Record<ValidStatusCodes, z.ZodType<any>>>
 
 type PathItem = `/${string}`;
 type OperationIdBase = string
