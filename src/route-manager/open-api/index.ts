@@ -22,6 +22,13 @@ type GetResponseSpecMeta<Version extends OASVersions> = {
     [Status in ValidStatusCodes]?: Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'>
 }
 
+export type ValidRefFormat = `#/components/${string}`
+
+type RefFormats = {
+    schemas: ValidRefFormat,
+    parameters: ValidRefFormat
+}
+
 export const OpenAPIManager = <
     SpecVersion extends OASVersions,
     SpecBodyVersion extends InferSpecBodyFromVersion<SpecVersion>
@@ -30,7 +37,7 @@ export const OpenAPIManager = <
     specFile: SpecBodyVersion,
     defaultMetadata?: {
         responses?: GetResponseSpecMeta<SpecVersion>
-    } 
+    }
 }) => {
     const documentAnnotations: any = {}
     let endpointGroupList: any = {}
@@ -65,7 +72,7 @@ export const OpenAPIManager = <
     }
 
     const build = (buildConfig: {
-        failOnError?: boolean,
+        failOnError?: boolean
     }) => {
         const builder = apiBuilder({
             failOnError: buildConfig.failOnError ?? false,

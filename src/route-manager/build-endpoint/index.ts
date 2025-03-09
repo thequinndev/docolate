@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { EndpointBase } from "../endpoint";
-import { zodToJsonSchema } from 'zod-to-json-schema'
+import { SchemaProcessor } from "../schema-process";
 
 type Errors = {
     path: string,
@@ -18,6 +18,8 @@ export const apiBuilder = (config: {
     let errors: Errors[] = []
     let apiPaths: any = {}
 
+    const schemaProcessor = SchemaProcessor()
+
     const throwLastError = () => {
         throw new Error(JSON.stringify(errors[errors.length - 1], null, 2))
     }
@@ -32,20 +34,12 @@ export const apiBuilder = (config: {
         })
     }
 
-    const processSchema = (schema: z.ZodType<any>) => {
-        const jsonSchema = zodToJsonSchema(schema) as any
-        delete jsonSchema['$ref']
-        delete jsonSchema['$schema']
-        delete jsonSchema['additionalProperties']
-        return jsonSchema
-    }
-    
     const processAccepts = (endpoint: EndpointBase, annotations?: any) => {
         const result = {} as any
         let parameters = [] as any[]
         const accepts = endpoint.accepts
         if (accepts?.body) {
-            const schema = processSchema(accepts.body)
+            const schema = schemaProcessor.processSchema(accepts.body)
             annotations = annotations ?? {}
             result['requestBody'] = {
                 ...buildContent(schema, annotations)
@@ -69,7 +63,7 @@ export const apiBuilder = (config: {
     
     const buildParams = (inType: 'query' | 'path', paramSchema: z.ZodObject<any>, parameters: any[]) => {
         for (const name in paramSchema.shape) {
-            const schema = processSchema(paramSchema.shape[name])
+            const schema = schemaProcessor.processSchema(paramSchema.shape[name])
             const required = paramSchema.shape[name].isOptional() === false
             const item = {
                 in: inType,
@@ -120,7 +114,7 @@ export const apiBuilder = (config: {
                 }
             }
             const responseItem = (returns as any)[statusCode]
-            const schema = processSchema(responseItem)
+            const schema = schemaProcessor.processSchema(responseItem)
             responses[statusCode] = {
                 ...buildContent(schema, annotation)
             }
@@ -141,6 +135,7 @@ export const apiBuilder = (config: {
 
         return {
             ...specFile,
+            ...schemaProcessor.getComponents(),
             paths: {
                 ...apiPaths
             }

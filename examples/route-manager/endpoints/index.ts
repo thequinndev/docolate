@@ -6,7 +6,7 @@ const routeManager = RouteManager()
 const errorSchema = z.object({
     code: z.string(),
     message: z.string(),
-})
+}).describe('Error')
 
 const error500 = z.enum(['Internal Server Error'])
 
@@ -14,7 +14,7 @@ const apiDocumentationSchema = z.object({
     apiVersion: z.string(),
     apiStatus: z.enum(['active', 'deprecated', 'inactive']),
     apiDocumentation: z.string().url(),
-})
+}).describe('ApiDocumentation')
 
 const getApiDocumentation = routeManager.endpoint({
     operationId: 'getApiDocumentation',
@@ -32,7 +32,7 @@ const userSchema = z.object({
     id: z.number(),
     name: z.string(),
     description: z.string(),
-})
+}).describe('User')
 
 const getUserById = routeManager.endpoint({
     operationId: 'getUserById',

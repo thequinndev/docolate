@@ -4,6 +4,54 @@
     "title": "OpenAPIManager Example",
     "version": "1.0.0"
   },
+  "components": {
+    "schemas": {
+      "ApiDocumentation": {
+        "type": "object",
+        "properties": {
+          "apiVersion": {
+            "type": "string"
+          },
+          "apiStatus": {
+            "type": "string",
+            "enum": [
+              "active",
+              "deprecated",
+              "inactive"
+            ]
+          },
+          "apiDocumentation": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "apiStatus",
+          "apiDocumentation"
+        ]
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "description"
+        ]
+      }
+    }
+  },
   "paths": {
     "/": {
       "description": "The API Documentation",
@@ -15,29 +63,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "apiVersion": {
-                      "type": "string"
-                    },
-                    "apiStatus": {
-                      "type": "string",
-                      "enum": [
-                        "active",
-                        "deprecated",
-                        "inactive"
-                      ]
-                    },
-                    "apiDocumentation": {
-                      "type": "string",
-                      "format": "uri"
-                    }
-                  },
-                  "required": [
-                    "apiVersion",
-                    "apiStatus",
-                    "apiDocumentation"
-                  ]
+                  "$ref": "#/components/schemas/ApiDocumentation"
                 }
               }
             }
@@ -62,7 +88,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -88,7 +115,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -130,23 +158,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "number"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "description"
-                  ]
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -171,7 +183,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -197,7 +210,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -224,23 +238,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "number"
-                  },
-                  "name": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "id",
-                  "name",
-                  "description"
-                ]
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -261,23 +259,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "number"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "description"
-                  ]
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -302,7 +284,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -328,7 +311,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -411,7 +395,8 @@
                       "name",
                       "description"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "User"
                   }
                 }
               }
@@ -437,7 +422,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -463,7 +449,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -490,19 +477,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string"
-                  },
-                  "description": {
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "name",
-                  "description"
-                ]
+                "$ref": "#/components/schemas/User"
               },
               "example": {
                 "name": "John Smith",
@@ -517,23 +492,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "number"
-                    },
-                    "name": {
-                      "type": "string"
-                    },
-                    "description": {
-                      "type": "string"
-                    }
-                  },
-                  "required": [
-                    "id",
-                    "name",
-                    "description"
-                  ]
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -558,7 +517,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
@@ -584,7 +544,8 @@
                       "code",
                       "message"
                     ],
-                    "additionalProperties": false
+                    "additionalProperties": false,
+                    "description": "Error"
                   }
                 }
               }
