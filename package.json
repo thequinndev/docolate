@@ -6,28 +6,38 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "build": "tsc -p tsconfig.build.json",
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.build.json",
     "build:example:db-doc": "tsx examples/db-manager/document/index.ts"
   },
   "exports": {
     "./route-manager": {
-      "import": "./dist/route-manager/index.js",
+      "import": "./dist/route-manager.js",
       "types": "./dist/route-manager/index.d.ts"
     }
   },
   "files": [
-    "dist",        
-    "README.md",    
-    "LICENSE",      
-    "package.json" 
+    "dist",
+    "README.md",
+    "LICENSE",
+    "package.json",
+    "route-manager.d.ts"
   ],
-  "author": "",
+  "author": "thequinndev",
   "license": "MIT",
   "dependencies": {
     "openapi3-ts": "^4.4.0",
     "zod": "^3.24.2",
     "zod-to-json-schema": "^3.24.3"
   },
+  "keywords": [
+    "openapi3",
+    "ts",
+    "typescript",
+    "openapi",
+    "endpoints",
+    "zod",
+    "routes"
+  ],
   "devDependencies": {
     "@thequinndev/db-manager": "workspace:*",
     "@thequinndev/route-manager": "workspace:*",
@@ -42,6 +52,7 @@
     "tsup": "^8.4.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2",
+    "vite": "^6.2.1",
     "vitest": "^3.0.8"
   }
 }
