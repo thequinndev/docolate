@@ -6,8 +6,21 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
+    "build": "tsc -p tsconfig.build.json",
     "build:example:db-doc": "tsx examples/db-manager/document/index.ts"
   },
+  "exports": {
+    "./route-manager": {
+      "import": "./dist/route-manager/index.js",
+      "types": "./dist/route-manager/index.d.ts"
+    }
+  },
+  "files": [
+    "dist",        
+    "README.md",    
+    "LICENSE",      
+    "package.json" 
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {
