@@ -595,7 +595,34 @@ describe("OpenAPIManager", () => {
 
   it('Will return errors for MissingDocsExample in failOnError: false', () => {
     const result = MissingDocsExample.build({failOnError: false})
-    expect(result.errors).toEqual([])
+    expect(result.errors).toEqual([{
+        "message": "Description is missing for response status 200",
+        "method": "get",
+        "operationId": "getApiDocumentation",
+        "path": "/",
+        "severity": "error",
+      },
+      {
+        "message": "Description is missing for response status 400",
+        "method": "get",
+        "operationId": "getApiDocumentation",
+        "path": "/",
+        "severity": "error",
+      },
+      {
+        "message": "Description is missing for response status 404",
+        "method": "get",
+        "operationId": "getApiDocumentation",
+        "path": "/",
+        "severity": "error",
+      },
+      {
+        "message": "Description is missing for response status 500",
+        "method": "get",
+        "operationId": "getApiDocumentation",
+        "path": "/",
+        "severity": "error",
+      },])
   })
 
 });
