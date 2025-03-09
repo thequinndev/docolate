@@ -625,4 +625,18 @@ describe("OpenAPIManager", () => {
       },])
   })
 
+  it('Will throw an error for MissingDocsExample when failOnError: true', () => {
+    try {
+        MissingDocsExample.build({failOnError: true})
+    } catch(error) {
+        expect(error).toEqual(new Error(JSON.stringify({
+            "message": "Description is missing for response status 200",
+            "operationId": "getApiDocumentation",
+            "path": "/",
+            "method": "get",
+            "severity": "error"
+          }, null, 2)))
+    }
+  })
+
 });
