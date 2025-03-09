@@ -5,7 +5,8 @@ export default defineConfig({
     build: {
         lib: {
             entry: {
-                'route-manager': resolve(__dirname, 'src/route-manager/index.ts'),
+                index: resolve(__dirname, 'src/index.ts'),
+                'route-manager': resolve(__dirname, 'src/route-manager.ts'),
             },
             name: 'Docolate'
         },

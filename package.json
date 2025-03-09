@@ -3,16 +3,21 @@
   "version": "0.0.1",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "vitest",
-    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.build.json",
+    "build": "vite build && tsc -p tsconfig.build.json",
     "build:example:db-doc": "tsx examples/db-manager/document/index.ts"
   },
   "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    },
     "./route-manager": {
-      "import": "./dist/route-manager.js",
-      "types": "./dist/route-manager/index.d.ts"
+      "require": "./dist/route-manager.js",
+      "types": "./dist/route-manager.d.ts"
     }
   },
   "files": [
