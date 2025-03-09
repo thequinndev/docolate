@@ -1,6 +1,13 @@
 import { OpenAPIManager } from '@thequinndev/route-manager/openapi/manager'
 import { apiDocumentationEndpoints, userEndpoints } from '../../endpoints'
 
+
+const missingDocs = OpenAPIManager({
+    version: '3.0',
+});
+
+missingDocs.addEndpointGroup(apiDocumentationEndpoints)
+
 const apiDocumentationDocument = OpenAPIManager({
     version: '3.0',
     // Only these fields are required, the rest are optional
@@ -107,3 +114,4 @@ apiUserDocument.addEndpointGroup(userEndpoints)
 
 export const ApiDocumentExample = apiDocumentationDocument
 export const UserDocumentExample = apiUserDocument
+export const MissingDocsExample = missingDocs
