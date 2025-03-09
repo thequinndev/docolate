@@ -64,8 +64,7 @@ export const OpenAPIManager = <
         const withAnnotation = <
             OperationId extends keyof Operations,
             Operation extends Operations[OperationId],
-            RequestBody extends InferRequestAccepts<Operation['accepts'], 'body'>,
-            Responses extends Omit<InferResponses<Operation>, 'defaultSuccess'>
+            RequestBody extends InferRequestAccepts<Operation['accepts'], 'body'>
         >(operationId: OperationId, annotations: {
             path?: GetPathSpecMeta<SpecVersion>,
             requestBody?: GetRequestBodySpecMeta<SpecVersion, RequestBody>,
