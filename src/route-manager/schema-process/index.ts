@@ -17,7 +17,6 @@ export const SchemaProcessor = () => {
     }
 
     const makeSchemaRef = (ref: string) => `${refFormats.schemas}/${ref}`
-    const makeParamRef = (ref: string) => `${refFormats.parameters}/${ref}`
 
     const getSchemaId = (schema: z.ZodType<any>): string | null => {
         return schema._def.description ?? null;

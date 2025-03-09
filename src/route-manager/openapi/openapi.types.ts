@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts, StatusCodeRecord, ValidStatusCodes } from "@thequinndev/route-manager/endpoint";
+import { EndpointBase, StatusCodeRecord, ValidStatusCodes } from "@thequinndev/route-manager/endpoint";
 import { oas30, oas31 } from 'openapi3-ts'
 
 export type OASVersions = '3.0' | '3.1'
@@ -36,10 +36,4 @@ Endpoint extends EndpointBase
     } : never
 } : never
 
-
 export type ValidRefFormat = `#/components/${string}`
-
-type RefFormats = {
-    schemas: ValidRefFormat,
-    parameters: ValidRefFormat
-}
