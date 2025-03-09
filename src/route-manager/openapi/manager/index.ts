@@ -26,15 +26,14 @@ export const OpenAPIManager = <
             responses?: InferResponsesForExamples<SpecVersion, Operation>
         }) => {
             documentAnnotations[operationId as string] = annotations
-
-            endpointGroupList = {
-                ...endpointGroupList,
-                ...endpointGroup
-            }
             return {
                 withAnnotation,
                 addEndpointGroup
             }
+        }
+        endpointGroupList = {
+            ...endpointGroupList,
+            ...endpointGroup
         }
         return {
             withAnnotation,
@@ -50,6 +49,7 @@ export const OpenAPIManager = <
             defaultMetadata: config.defaultMetadata ?? {}
         })
         const spec = builder.newSpecFile(endpointGroupList, documentAnnotations)
+        console.log(endpointGroupList)
         return {
             spec,
             errors: builder.getErrors()
