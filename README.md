@@ -1,6 +1,9 @@
 # Docolate 🍫
 Sweet documentation. Docolate will include a number of documentation and schema modules. The current modules are listed below.
 
+<a><img src="https://img.shields.io/badge/created%20by-@thequinndev-purple.svg" alt="Created by @thequinndev"></a>
+<hr />
+
 All modules will be powered by zod: https://zod.dev/
 
 > https://www.npmjs.com/package/@thequinndev/docolate
