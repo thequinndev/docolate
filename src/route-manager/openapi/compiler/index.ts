@@ -26,14 +26,19 @@ export const OpenAPISpecCompiler = <SpecVersion extends OASVersions>(config: {
         failOnError?: boolean,
     }) => {
         let specFile = config.specFile as oas31.OpenAPIObject
-        const failOnError = buildConfig?.failOnError ?? false
+        if (!buildConfig) {
+            buildConfig = {
+                failOnError: false
+            }
+        }
+        const failOnError = buildConfig.failOnError!
         for (const manager of config.openApiManagers) {
             const subBuild = manager.build({
                 failOnError: failOnError
             })
 
 
-            if (subBuild.spec.components.schemas || subBuild.spec.components.parameters) {
+            if (subBuild.spec.components.parameters || subBuild.spec.components.schemas) {
                 if (!specFile.components) {
                     specFile.components = {}
                 }
