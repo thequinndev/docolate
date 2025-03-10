@@ -9,7 +9,7 @@ export type InferSpecBodyFromVersion<Version extends OASVersions> = OmitUnusedSp
     : Version extends '3.1' ? oas31.OpenAPIObject : never
 >
 
-export type GetPathSpecMeta<Version extends OASVersions> = Pick<Version extends '3.0' ? oas30.PathItemObject : oas31.PathItemObject, 'description' | 'summary'>
+type GetPathSpecMeta<Version extends OASVersions> = Pick<Version extends '3.0' ? oas30.PathItemObject : oas31.PathItemObject, 'description' | 'summary'>
 
 export type GetRequestBodySpecMeta<Version extends OASVersions, T> = (Pick<Version extends '3.0' ? oas30.RequestBodyObject : oas31.RequestBodyObject, 'description' | 'required'>) & T extends object ? {
     example?: T,
