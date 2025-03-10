@@ -2,7 +2,7 @@
 
 import { oas31 } from "openapi3-ts";
 import { OASVersions, InferSpecBodyFromVersion } from "../openapi.types";
-import { Error } from '@thequinndev/route-manager/build-endpoint'
+import { Error } from '../../build-endpoint'
 
 interface OpenApiManager {
   build: (buildConfig: { failOnError: boolean }) => {

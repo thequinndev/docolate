@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EndpointArrayByOperationIds, EndpointBase, StatusCodeRecord, ValidStatusCodes } from "@thequinndev/route-manager/endpoint";
+import { EndpointArrayByOperationIds, EndpointBase, StatusCodeRecord, ValidStatusCodes } from "../endpoint";
 import { oas30, oas31 } from 'openapi3-ts'
 
 export type OASVersions = '3.0' | '3.1'

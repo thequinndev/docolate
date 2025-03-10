@@ -1,5 +1,5 @@
 import { apiBuilder } from "../../build-endpoint";
-import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts } from "@thequinndev/route-manager/endpoint";
+import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts } from "../../endpoint";
 import { OASVersions, GetResponseSpecMetaDefault, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation, GetOperationSpecMeta } from '../openapi.types'
 
 export const OpenAPIManager = <

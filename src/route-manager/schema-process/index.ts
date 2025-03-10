@@ -1,6 +1,6 @@
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
-import { ValidRefFormat } from "@thequinndev/route-manager/openapi/openapi.types";
+import { ValidRefFormat } from "../openapi/openapi.types";
 
 const refFormats = {
     schemas: '#/components/schemas' as ValidRefFormat,
