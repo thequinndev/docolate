@@ -16,7 +16,7 @@ interface OpenApiManager {
   };
 }
 
-export const OpenApiSpecCompiler = <SpecVersion extends OASVersions>(config: {
+export const OpenAPISpecCompiler = <SpecVersion extends OASVersions>(config: {
   version: SpecVersion;
   specFile: InferSpecBodyFromVersion<SpecVersion>,
   openApiManagers: OpenApiManager[];

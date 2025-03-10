@@ -1,8 +1,8 @@
-import { OpenApiSpecCompiler } from '@thequinndev/route-manager/openapi/compiler'
+import { OpenAPISpecCompiler } from '@thequinndev/route-manager/openapi/compiler'
 import { writeFileSync } from 'fs';
 import { ApiDocumentExample, UserDocumentExample } from '../manager';
 
-const compiler = OpenApiSpecCompiler({
+const compiler = OpenAPISpecCompiler({
     version: '3.0',
     specFile: {
         openapi: '3.0.0',

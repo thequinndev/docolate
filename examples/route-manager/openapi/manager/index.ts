@@ -82,7 +82,7 @@ apiUserDocument.addEndpointGroup(userEndpoints, {
     operations: {
         'createUser': {
             operation: {
-                description: 'Create a new user'
+                description: 'Create a new user',
             },
             responses: {
                 200: {
