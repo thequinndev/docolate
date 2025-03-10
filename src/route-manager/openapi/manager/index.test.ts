@@ -34,19 +34,19 @@ describe("OpenAPIManager", () => {
                         },
                         "Error": {
                             "properties": {
-                              "code": {
-                                "type": "string",
-                              },
-                              "message": {
-                                "type": "string",
-                              },
+                                "code": {
+                                    "type": "string",
+                                },
+                                "message": {
+                                    "type": "string",
+                                },
                             },
                             "required": [
-                              "code",
-                              "message",
+                                "code",
+                                "message",
                             ],
                             "type": "object",
-                          },
+                        },
                     },
                 },
                 "paths": {
@@ -119,37 +119,55 @@ describe("OpenAPIManager", () => {
         const document = UserDocumentExample.build({ failOnError: false })
         expect(document.errors).toEqual([])
         expect(document.spec.components).toEqual({
+            "parameters": {
+                "PathUserId": {
+                    "in": "path",
+                    "name": "userId",
+                    "required": true,
+                    "schema": {
+                        "type": "number",
+                    },
+                },
+                "QueryUserName": {
+                    "in": "query",
+                    "name": "name",
+                    "required": false,
+                    "schema": {
+                        "type": "string",
+                    },
+                },
+            },
             "schemas": {
                 "Error": {
                     "properties": {
-                      "code": {
-                        "type": "string",
-                      },
-                      "message": {
-                        "type": "string",
-                      },
+                        "code": {
+                            "type": "string",
+                        },
+                        "message": {
+                            "type": "string",
+                        },
                     },
                     "required": [
-                      "code",
-                      "message",
+                        "code",
+                        "message",
                     ],
                     "type": "object",
-                  },
-                  "UserCreate": {
+                },
+                "UserCreate": {
                     "properties": {
-                      "description": {
-                        "type": "string",
-                      },
-                      "name": {
-                        "type": "string",
-                      },
+                        "description": {
+                            "type": "string",
+                        },
+                        "name": {
+                            "type": "string",
+                        },
                     },
                     "required": [
-                      "name",
-                      "description",
+                        "name",
+                        "description",
                     ],
                     "type": "object",
-                  },
+                },
                 "UserGet": {
                     "properties": {
                         "description": {
@@ -180,12 +198,7 @@ describe("OpenAPIManager", () => {
                 "operationId": "searchUsers",
                 "parameters": [
                     {
-                        "in": "query",
-                        "name": "name",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        },
+                        "$ref": "#/components/parameters/QueryUserName"
                     },
                     {
                         "in": "query",
@@ -326,7 +339,7 @@ describe("OpenAPIManager", () => {
             },
             "summary": "All User Endpoints",
         })
-        
+
         expect(document.spec.paths["/users/{userId}"]).toEqual({
             "description": "Specific User Operations",
             "get": {
@@ -334,12 +347,7 @@ describe("OpenAPIManager", () => {
                 "operationId": "getUserById",
                 "parameters": [
                     {
-                        "in": "path",
-                        "name": "userId",
-                        "required": true,
-                        "schema": {
-                            "type": "number",
-                        },
+                        "$ref": "#/components/parameters/PathUserId"
                     },
                 ],
                 "responses": {
@@ -348,11 +356,11 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "examples": {
                                     "valid": {
-                                      "value": {
-                                        "description": "A new user",
-                                        "id": 123,
-                                        "name": "John Smith",
-                                      },
+                                        "value": {
+                                            "description": "A new user",
+                                            "id": 123,
+                                            "name": "John Smith",
+                                        },
                                     },
                                 },
                                 "schema": {

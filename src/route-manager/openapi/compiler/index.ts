@@ -9,6 +9,7 @@ interface OpenApiManager {
     spec: {
         components: {
             schemas?: any;
+            parameters?: any,
           };
           paths: any;
     },
@@ -32,15 +33,30 @@ export const OpenAPISpecCompiler = <SpecVersion extends OASVersions>(config: {
                 failOnError: failOnError
             })
 
+
             if (subBuild.spec.components.schemas) {
+                if (!specFile.components) {
+                    specFile.components = {}
+                }
                 if (!specFile.components?.schemas) {
-                    specFile.components = {
-                        schemas: {}
-                    }
+                    specFile.components.schemas = {}
                 }
                 specFile.components.schemas = {
                     ...specFile.components.schemas,
                     ...subBuild.spec.components.schemas
+                }
+            }
+
+            if (subBuild.spec.components.parameters) {
+                if (!specFile.components) {
+                    specFile.components = {}
+                }
+                if (!specFile.components?.parameters) {
+                    specFile.components.parameters = {}
+                }
+                specFile.components.parameters = {
+                    ...specFile.components.parameters,
+                    ...subBuild.spec.components.parameters
                 }
             }
 

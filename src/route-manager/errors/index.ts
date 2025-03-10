@@ -8,5 +8,7 @@ export const RouteManagerErrors = {
         'The above errors will likely cause OpenAPI validation errors.',
         'If you want errors to prevent the build from completing, please set failOnError: true',
         'apiBuilder.build({failOnError: true})'
-    ].join('\n')
+    ].join('\n'),
+    NoArrayParameter: "You cannot make parameters from arrays",
+    NoObjectParameter: "You cannot make parameters from objects",
 }

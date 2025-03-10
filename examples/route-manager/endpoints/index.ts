@@ -12,8 +12,8 @@ const componentFactory = ComponentFactory({
         'UserCreate'
     ],
     parameters: [
-        'UserId',
-        'UserName'
+        'PathUserId',
+        'QueryUserName'
     ]
 })
 
@@ -49,7 +49,7 @@ const userSchema = componentFactory.makeSchema(z.object({
 }), 'UserGet')
 
 
-//const userIdParameter = componentFactory.makeParameterItem(userSchema.shape.id, 'UserId')
+const userIdParameter = componentFactory.makeParameterItem(userSchema.shape.id, 'PathUserId')
 
 const getUserById = routeManager.endpoint({
     operationId: 'getUserById',
@@ -57,7 +57,7 @@ const getUserById = routeManager.endpoint({
     method: 'get',
     accepts: {
         path: z.object({
-            userId: userSchema.shape.id
+            userId: userIdParameter
         })
     },
     returns: {
@@ -68,7 +68,7 @@ const getUserById = routeManager.endpoint({
     }
 })
 
-//const nameParameter = componentFactory.makeParameterItem(userSchema.shape.name, 'UserName')
+const nameParameter = componentFactory.makeParameterItem(userSchema.shape.name, 'QueryUserName')
 
 const searchUsers = routeManager.endpoint({
     operationId: 'searchUsers',
@@ -76,7 +76,7 @@ const searchUsers = routeManager.endpoint({
     method: 'get',
     accepts: {
         query: z.object({
-            name: userSchema.shape.name,
+            name: nameParameter,
             description: userSchema.shape.description
         }).partial(),
     },

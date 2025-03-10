@@ -19,6 +19,7 @@ export const SchemaProcessor = () => {
     }
 
     const makeSchemaRef = (ref: string) => `${refFormats.schemas}/${ref}`
+    const makeParameterRef = (ref: string) => `${refFormats.parameters}/${ref}`
 
     const getSchemaId = (schema: z.ZodType<any>): string | null => {
         return schema._def.description ?? null;
@@ -153,11 +154,39 @@ export const SchemaProcessor = () => {
         }
     }
 
+    const ensureParametersTypesAreThereAndAdd = (ref: string, schema: any) => {
+        if (!componentsObject.parameters) {
+            componentsObject.parameters = {}
+        }
+
+        componentsObject.parameters[ref] = schema
+    }
+
+    const processParameter = (parameterBase: any, schema: z.ZodType<any>) => {
+        const ref = getSchemaId(schema)
+        if (ref) {
+            const paramRef = makeParameterRef(ref)
+            ensureParametersTypesAreThereAndAdd(ref, {
+                ...parameterBase,
+                schema: convertAndStrip(schema)
+            })
+            return {
+                '$ref': paramRef
+            }
+        }
+
+        return {
+            ...parameterBase,
+            schema: convertAndStrip(schema)
+        }
+    }
+
     return {
         getSchemaId,
         processSchema,
         getComponents,
-        convertAndStrip
+        convertAndStrip,
+        processParameter
     }
 }
 

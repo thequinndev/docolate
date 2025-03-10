@@ -64,15 +64,14 @@ export const apiBuilder = (config: {
     
     const buildParams = (inType: 'query' | 'path', paramSchema: z.ZodObject<any>, parameters: any[]) => {
         for (const name in paramSchema.shape) {
-            const schema = schemaProcessor.processSchema(paramSchema.shape[name])
             const required = paramSchema.shape[name].isOptional() === false
             const item = {
                 in: inType,
                 name,
                 required,
-                schema
+
             }
-            parameters.push(item)
+            parameters.push(schemaProcessor.processParameter(item, paramSchema.shape[name]))
         }
         
         return parameters

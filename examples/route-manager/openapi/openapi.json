@@ -46,7 +46,7 @@
           "message"
         ]
       },
-      "User": {
+      "UserGet": {
         "type": "object",
         "properties": {
           "id": {
@@ -64,6 +64,39 @@
           "name",
           "description"
         ]
+      },
+      "UserCreate": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ]
+      }
+    },
+    "parameters": {
+      "UserId": {
+        "in": "path",
+        "name": "userId",
+        "required": true,
+        "schema": {
+          "type": "number"
+        }
+      },
+      "UserName": {
+        "in": "query",
+        "name": "name",
+        "required": false,
+        "schema": {
+          "type": "string"
+        }
       }
     }
   },
@@ -135,12 +168,7 @@
         "operationId": "getUserById",
         "parameters": [
           {
-            "in": "path",
-            "name": "userId",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
+            "$ref": "#/components/parameters/UserId"
           }
         ],
         "responses": {
@@ -149,7 +177,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserGet"
                 },
                 "examples": {
                   "valid": {
@@ -211,7 +239,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserGet"
               }
             }
           }
@@ -232,7 +260,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserGet"
                 }
               }
             }
@@ -288,33 +316,14 @@
         "operationId": "searchUsers",
         "parameters": [
           {
-            "in": "query",
-            "name": "name",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "not": {}
-                },
-                {
-                  "type": "string"
-                }
-              ]
-            }
+            "$ref": "#/components/parameters/UserName"
           },
           {
             "in": "query",
             "name": "description",
             "required": false,
             "schema": {
-              "anyOf": [
-                {
-                  "not": {}
-                },
-                {
-                  "type": "string"
-                }
-              ]
+              "type": "string"
             }
           }
         ],
@@ -326,7 +335,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/User"
+                    "$ref": "#/components/schemas/UserGet"
                   }
                 }
               }
@@ -380,7 +389,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
+                "$ref": "#/components/schemas/UserCreate"
               },
               "example": {
                 "name": "John Smith",
@@ -395,7 +404,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
+                  "$ref": "#/components/schemas/UserGet"
                 },
                 "example": {
                   "id": 1,
