@@ -10,7 +10,8 @@ Start here to see an example of how to build endpoints.
 
 ## OpenAPI
 
-``./openapi``
+* ``./openapi/manager`` - OpenAPIManager example
+* ``./openapi/compiler`` - OpenAPISpecCompiler example
 
 Go here next to see how the endpoints can be built into a working OpenAPI spec. Just like the one here: https://github.com/thequinndev/docolate/blob/main/examples/route-manager/openapi/openapi.json
 * Refer to the docs for more info: https://github.com/thequinndev/docolate/wiki/Docolate-%E2%80%90-OpenAPI-Manager
