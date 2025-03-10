@@ -1,6 +1,7 @@
 import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 import { ValidRefFormat } from "../openapi/openapi.types";
+import { RouteManagerErrors } from "../errors";
 
 const refFormats = {
     schemas: '#/components/schemas' as ValidRefFormat,
@@ -85,6 +86,11 @@ export const SchemaProcessor = () => {
     const processSchema = (schema: z.ZodType<any>): any => {
 
         if (schema instanceof z.ZodArray) {
+
+            // Array components add a complexity overhead and prevent the underlying objects from being modular
+            if (getSchemaId(schema)) {
+                throw new Error(RouteManagerErrors.NoArrayRefs)
+            }
 
             const arrayJsonSchema = convertAndStrip(schema)
 

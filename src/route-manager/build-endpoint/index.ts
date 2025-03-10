@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { EndpointBase } from "../endpoint";
 import { SchemaProcessor } from "../schema-process";
+import { RouteManagerErrors } from "../errors";
 
 export type Error = {
     path: string,
@@ -108,7 +109,7 @@ export const apiBuilder = (config: {
                 annotation = config.defaultMetadata?.responses?.[statusCode] ?? {}
             }
             if (!annotation.description) {
-                addErrorMessage(endpoint, `Description is missing for response status ${statusCode}`, 'error')
+                addErrorMessage(endpoint, RouteManagerErrors.ResponseDescriptionMissing(statusCode), 'error')
                 if (config.failOnError) {
                     throwLastError()
                 }
@@ -171,9 +172,7 @@ export const apiBuilder = (config: {
 
         if (errors.length && config.failOnError === false) {
             console.log(errors)
-            console.log('The above errors will likely cause OpenAPI validation errors.')
-            console.log('If you want errors to prevent the build from completing, please set failOnError: true')
-            console.log('apiBuilder.build({failOnError: true})')
+            console.log(RouteManagerErrors.ErrorFooter)
         }
     }
 

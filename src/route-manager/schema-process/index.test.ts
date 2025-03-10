@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SchemaProcessor } from ".";
+import { RouteManagerErrors } from "../errors";
 
 describe("getSchemaId", () => {
   describe("with ID", () => {
@@ -156,5 +157,17 @@ describe("processSchema", () => {
         required: ["key1"],
       });
     });
+  });
+
+  describe("with Array", () => {
+    it("Will throw an error if you try to make an $ref array", () => {
+        const invalidArray = z.object({name: z.string()}).array().describe('Anything')
+        try {
+            const schemaProcessor = SchemaProcessor()
+            schemaProcessor.processSchema(invalidArray)
+        } catch(error) {
+            expect(error).toEqual(new Error(RouteManagerErrors.NoArrayRefs))
+        }
+    })
   });
 });
