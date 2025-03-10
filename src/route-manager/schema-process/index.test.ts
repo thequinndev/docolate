@@ -171,3 +171,41 @@ describe("processSchema", () => {
     })
   });
 });
+
+describe("convertAndStrip", () => {
+    describe("with Primitives", () => {
+      it("Will remove useless json schema", () => {
+            const schemaProcessor = SchemaProcessor()
+            const result = schemaProcessor.convertAndStrip(z.string().describe('RemoveMe'))
+            expect(result).toEqual({
+                type: 'string'
+            })
+      })
+    });
+
+    describe("with Primitives derived from objects", () => {
+        it("Will remove useless json schema", () => {
+              const schemaProcessor = SchemaProcessor()
+              const parent = z.object({
+                name: z.string()
+              })
+              const result = schemaProcessor.convertAndStrip(parent.shape.name.describe('RemoveMe'))
+              expect(result).toEqual({
+                  type: 'string'
+              })
+        })
+      });
+
+      describe("with Primitives derived from partial objects", () => {
+        it("Will remove useless json schema", () => {
+              const schemaProcessor = SchemaProcessor()
+              const parent = z.object({
+                name: z.string()
+              }).partial()
+              const result = schemaProcessor.convertAndStrip(parent.shape.name.describe('RemoveMe'))
+              expect(result).toEqual({
+                  type: 'string'
+              })
+        })
+      });
+  });

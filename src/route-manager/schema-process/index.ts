@@ -2,6 +2,7 @@ import { z } from "zod";
 import zodToJsonSchema from "zod-to-json-schema";
 import { ValidRefFormat } from "../openapi/openapi.types";
 import { RouteManagerErrors } from "../errors";
+import { schemaPostProcess } from "./schema-post-process";
 
 const refFormats = {
     schemas: '#/components/schemas' as ValidRefFormat,
@@ -25,11 +26,14 @@ export const SchemaProcessor = () => {
 
 
     const convertAndStrip = (schema: z.ZodType<any>) => {
-        const jsonSchema = zodToJsonSchema(schema) as any;
+        let jsonSchema = zodToJsonSchema(schema) as any;
         delete jsonSchema["$ref"];
         delete jsonSchema["$schema"];
         delete jsonSchema["additionalProperties"];
         delete jsonSchema["description"]
+
+        jsonSchema = schemaPostProcess(jsonSchema)
+
         return jsonSchema;
     };
 
@@ -153,7 +157,8 @@ export const SchemaProcessor = () => {
     return {
         getSchemaId,
         processSchema,
-        getComponents
+        getComponents,
+        convertAndStrip
     }
 }
 
