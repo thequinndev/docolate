@@ -1,7 +1,7 @@
 # Docolate 🍫
 Sweet documentation. Docolate will include a number of documentation and schema modules. The current modules are listed below.
 
-All modules will powered by zod: https://zod.dev/
+All modules will be powered by zod: https://zod.dev/
 
 > https://www.npmjs.com/package/@thequinndev/docolate
 ```
