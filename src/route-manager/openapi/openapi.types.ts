@@ -11,31 +11,29 @@ export type InferSpecBodyFromVersion<Version extends OASVersions> = OmitUnusedSp
 
 type GetPathSpecMeta<Version extends OASVersions> = Pick<Version extends '3.0' ? oas30.PathItemObject : oas31.PathItemObject, 'description' | 'summary'>
 
-export type GetRequestBodySpecMeta<Version extends OASVersions, T> = (Pick<(Version extends '3.0' ? oas30.RequestBodyObject : oas31.RequestBodyObject), 'description' | 'required'>) & (T extends object ? {
-    example?: T,
-    examples?: {
-        [name: string]: T
-    }
-} : {})
+export type GetRequestBodySpecMeta<Version extends OASVersions, T> = (Pick<(Version extends '3.0' ? oas30.RequestBodyObject : oas31.RequestBodyObject), 'description' | 'required'>)
+& (T extends object ? ValidExamples<T> : {})
 
 export type GetResponseSpecMetaDefault<Version extends OASVersions> = {
     [Status in ValidStatusCodes]?: Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'>
 }
-
 
 export type InferResponsesForExamples<
 Version extends OASVersions,
 Endpoint extends EndpointBase
 > = Endpoint['returns'] extends StatusCodeRecord ? {
     [Status in keyof Endpoint['returns'] as Status]?: Endpoint['returns'][Status] extends z.ZodType<any>
-    ? Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'> & {
-        example?: z.infer<Endpoint['returns'][Status]>,
-        examples?: {
-            [name: string]: z.infer<Endpoint['returns'][Status]>
-        }
-    } : never
+    ? Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'> &  ValidExamples<z.infer<Endpoint['returns'][Status]>> : never
 } : never
 
+type ValidExamples<T> = {
+    example?: T,
+    examples?: {
+        [name: string]: {
+            value: T
+        }
+    }
+}
 export type ValidRefFormat = `#/components/${string}`
 
 export type InferPathsFromGroupForAnnotation<Version extends OASVersions, Group extends EndpointArrayByOperationIds<EndpointBase[]>> = {

@@ -108,7 +108,16 @@ apiUserDocument.addEndpointGroup(userEndpoints, {
             },
             responses: {
                 200: {
-                    description: 'Successfully retrieved the user'
+                    description: 'Successfully retrieved the user',
+                    examples: {
+                        valid: {
+                            value: {
+                                id: 123,
+                                name: 'John Smith',
+                                description: 'A new user'
+                            }
+                        }
+                    }
                 },
             }
         },

@@ -417,6 +417,15 @@ describe("OpenAPIManager", () => {
                     "200": {
                         "content": {
                             "application/json": {
+                                "examples": {
+                                    "valid": {
+                                      "value": {
+                                        "description": "A new user",
+                                        "id": 123,
+                                        "name": "John Smith",
+                                      },
+                                    },
+                                },
                                 "schema": {
                                     "$ref": "#/components/schemas/User",
                                 },
