@@ -24,6 +24,7 @@
       "src/**/*.ts"
     ],
     "exclude": [
+      "src/db-manager/**/*.ts",
       "node_modules",
       "dist",
       "examples",
