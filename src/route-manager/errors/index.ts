@@ -1,7 +1,7 @@
 export const RouteManagerErrors = {
     NoArrayRefs: [
         "This library doesn't currently support Array Schemas as components.",
-        "See 'Important note on arrays': https://github.com/thequinndev/docolate/wiki/Docolate-%E2%80%90-OpenAPI-Manager-%E2%80%90-Handling-Components"
+        "See https://github.com/thequinndev/docolate/wiki/Docolate-%E2%80%90-OpenAPI-Manager-%E2%80%90-Handling-Components#important-note-on-arrays"
     ].join('\n'),
     ResponseDescriptionMissing: (statusCode: string) => `Description is missing for response status ${statusCode}`,
     ErrorFooter: [
