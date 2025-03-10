@@ -28,6 +28,12 @@ const apiDocumentationDocument = OpenAPIManager({
 });
 
 apiDocumentationDocument.addEndpointGroup(apiDocumentationEndpoints, {
+    paths: {
+        '/': {
+            description: 'API Root',
+            summary: 'Base Endpoint'
+        }
+    },
     operations: {
         'getApiDocumentation': {
             operation: {
@@ -63,6 +69,16 @@ const apiUserDocument = OpenAPIManager({
 });
 
 apiUserDocument.addEndpointGroup(userEndpoints, {
+    paths: {
+        '/users': {
+            description: 'All User Operations',
+            summary: 'All User Endpoints'
+        },
+        '/users/{userId}': {
+            description: 'Specific User Operations',
+            summary: 'User By ID Endpoints'
+        }
+    },
     operations: {
         'createUser': {
             operation: {

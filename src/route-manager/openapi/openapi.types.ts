@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EndpointBase, StatusCodeRecord, ValidStatusCodes } from "@thequinndev/route-manager/endpoint";
+import { EndpointArrayByOperationIds, EndpointBase, StatusCodeRecord, ValidStatusCodes } from "@thequinndev/route-manager/endpoint";
 import { oas30, oas31 } from 'openapi3-ts'
 
 export type OASVersions = '3.0' | '3.1'
@@ -37,3 +37,7 @@ Endpoint extends EndpointBase
 } : never
 
 export type ValidRefFormat = `#/components/${string}`
+
+export type InferPathsFromGroupForAnnotation<Version extends OASVersions, Group extends EndpointArrayByOperationIds<EndpointBase[]>> = {
+    [OperationId in keyof Group as Group[OperationId]['path']]?: GetPathSpecMeta<Version>
+}

@@ -1,6 +1,6 @@
 import { apiBuilder } from "../../build-endpoint";
 import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts } from "@thequinndev/route-manager/endpoint";
-import { OASVersions, GetResponseSpecMetaDefault, GetPathSpecMeta, GetRequestBodySpecMeta, InferResponsesForExamples } from '../openapi.types'
+import { OASVersions, GetResponseSpecMetaDefault, GetPathSpecMeta, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation } from '../openapi.types'
 
 export const OpenAPIManager = <
     SpecVersion extends OASVersions
@@ -16,7 +16,7 @@ export const OpenAPIManager = <
     const addEndpointGroup = <
         Operations extends EndpointArrayByOperationIds<EndpointBase[]>,
     >(endpointGroup: Operations, annotations?: {
-        path?: GetPathSpecMeta<SpecVersion>,
+        paths?: InferPathsFromGroupForAnnotation<SpecVersion, Operations>,
         operations?: {
             [OperationId in keyof Operations]?: {
                 operation?: any,
@@ -31,17 +31,17 @@ export const OpenAPIManager = <
             annotations = {}
         }
 
-        if (!annotations.path) {
-            annotations.path = {}
+        if (!annotations.paths) {
+            (annotations.paths as any) = {}
         }
 
         if (!annotations.operations) {
             annotations.operations = {}
         }
 
-        documentAnnotations.path = {
-            ...documentAnnotations.path,
-            ...annotations.path
+        documentAnnotations.paths = {
+            ...documentAnnotations.paths,
+            ...annotations.paths
         }
 
         documentAnnotations.operations = {
@@ -66,7 +66,6 @@ export const OpenAPIManager = <
             defaultMetadata: config.defaultMetadata ?? {}
         })
         const spec = builder.newSpecFile(endpointGroupList, documentAnnotations)
-        console.log(endpointGroupList)
         return {
             spec,
             errors: builder.getErrors()
