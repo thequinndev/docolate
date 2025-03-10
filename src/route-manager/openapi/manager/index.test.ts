@@ -184,14 +184,7 @@ describe("OpenAPIManager", () => {
                         "name": "name",
                         "required": false,
                         "schema": {
-                            "anyOf": [
-                                {
-                                    "not": {},
-                                },
-                                {
-                                    "type": "string",
-                                },
-                            ],
+                            "type": "string"
                         },
                     },
                     {
@@ -199,14 +192,7 @@ describe("OpenAPIManager", () => {
                         "name": "description",
                         "required": false,
                         "schema": {
-                            "anyOf": [
-                                {
-                                    "not": {},
-                                },
-                                {
-                                    "type": "string",
-                                },
-                            ],
+                            "type": "string"
                         },
                     },
                 ],
