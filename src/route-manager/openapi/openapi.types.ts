@@ -43,5 +43,5 @@ export type InferPathsFromGroupForAnnotation<Version extends OASVersions, Group 
 }
 
 export type GetOperationSpecMeta<Version extends OASVersions> = Pick<Version extends '3.0' ? oas30.OperationObject : oas31.OperationObject,
-'description' | 'summary' | 'deprecated' | 'security' | 'servers' | 'callbacks'
+'description' | 'summary' | 'deprecated' | 'security' | 'servers' | 'callbacks' | 'externalDocs'
 >
