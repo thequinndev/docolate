@@ -36,8 +36,8 @@ describe("OpenAPIManager", () => {
           },
           "paths": {
             "/": {
-              "description": "The API Documentation",
               "get": {
+                "description": "The API Documentation",
                 "operationId": "getApiDocumentation",
                 "responses": {
                   "200": {
@@ -155,8 +155,8 @@ describe("OpenAPIManager", () => {
           },
           "paths": {
             "/users": {
-              "description": "Search for users by their name or description",
               "get": {
+                "description": "Search for users by their name or description",
                 "operationId": "searchUsers",
                 "parameters": [
                   {
@@ -292,6 +292,7 @@ describe("OpenAPIManager", () => {
                 },
               },
               "post": {
+                "description": "Create a new user",
                 "operationId": "createUser",
                 "requestBody": {
                   "content": {
@@ -393,8 +394,8 @@ describe("OpenAPIManager", () => {
               },
             },
             "/users/{userId}": {
-              "description": "Get a user by their User ID",
               "get": {
+                "description": "Get a user by their User ID",
                 "operationId": "getUserById",
                 "parameters": [
                   {
@@ -487,6 +488,7 @@ describe("OpenAPIManager", () => {
                 },
               },
               "put": {
+                "description": "Update a user by their User ID",
                 "operationId": "updateUser",
                 "parameters": [
                   {

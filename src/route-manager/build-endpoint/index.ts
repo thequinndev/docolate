@@ -130,7 +130,7 @@ export const apiBuilder = (config: {
 
         for (const operationId in endpointGroupList) {
             const endpoint = endpointGroupList[operationId]
-            buildEndpointBody(endpoint, documentAnnotations[operationId] ?? undefined)
+            buildEndpointBody(endpoint, documentAnnotations.operations[operationId] ?? undefined)
         }
 
         return {
@@ -155,10 +155,13 @@ export const apiBuilder = (config: {
         if (!apiPaths[endpoint.path][endpoint.method]) {
             apiPaths[endpoint.path][endpoint.method] = {}
         }
+
+        const operationMeta = annotations?.operation ?? {}
     
         apiPaths[endpoint.path][endpoint.method] = {
             ...apiPaths[endpoint.path][endpoint.method],
             ...{
+                ...operationMeta,
                 operationId: endpoint.operationId,
                 ...accepts,
                 ...returns

@@ -16,20 +16,37 @@ export const OpenAPIManager = <
     const addEndpointGroup = <
         Operations extends EndpointArrayByOperationIds<EndpointBase[]>,
     >(endpointGroup: Operations, annotations?: {
-        [OperationId in keyof Operations]?: {
-            path?: GetPathSpecMeta<SpecVersion>,
-            requestBody?: GetRequestBodySpecMeta<SpecVersion, InferRequestAccepts<Operations[OperationId]['accepts'], 'body'>>,
-            responses?: InferResponsesForExamples<SpecVersion, Operations[OperationId]>
+        path?: GetPathSpecMeta<SpecVersion>,
+        operations?: {
+            [OperationId in keyof Operations]?: {
+                operation?: any,
+                requestBody?: GetRequestBodySpecMeta<SpecVersion, InferRequestAccepts<Operations[OperationId]['accepts'], 'body'>>,
+                responses?: InferResponsesForExamples<SpecVersion, Operations[OperationId]>
+            }
         }
+
     }) => {
 
         if (!annotations) {
             annotations = {}
         }
 
-        documentAnnotations = {
-            ...documentAnnotations,
-            ...annotations
+        if (!annotations.path) {
+            annotations.path = {}
+        }
+
+        if (!annotations.operations) {
+            annotations.operations = {}
+        }
+
+        documentAnnotations.path = {
+            ...documentAnnotations.path,
+            ...annotations.path
+        }
+
+        documentAnnotations.operations = {
+            ...documentAnnotations.operations,
+            ...annotations.operations
         }
 
         endpointGroupList = {
