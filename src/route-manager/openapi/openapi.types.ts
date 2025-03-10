@@ -11,12 +11,12 @@ export type InferSpecBodyFromVersion<Version extends OASVersions> = OmitUnusedSp
 
 type GetPathSpecMeta<Version extends OASVersions> = Pick<Version extends '3.0' ? oas30.PathItemObject : oas31.PathItemObject, 'description' | 'summary'>
 
-export type GetRequestBodySpecMeta<Version extends OASVersions, T> = (Pick<Version extends '3.0' ? oas30.RequestBodyObject : oas31.RequestBodyObject, 'description' | 'required'>) & T extends object ? {
+export type GetRequestBodySpecMeta<Version extends OASVersions, T> = (Pick<(Version extends '3.0' ? oas30.RequestBodyObject : oas31.RequestBodyObject), 'description' | 'required'>) & (T extends object ? {
     example?: T,
     examples?: {
         [name: string]: T
     }
-} : {}
+} : {})
 
 export type GetResponseSpecMetaDefault<Version extends OASVersions> = {
     [Status in ValidStatusCodes]?: Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'>
