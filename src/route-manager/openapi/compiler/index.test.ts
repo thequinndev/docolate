@@ -19,7 +19,7 @@ describe("OpenAPISpecCompiler", () => {
             ]
         })
 
-        expect(compiler.build({failOnError: false})).toEqual( {
+        expect(compiler.build()).toEqual( {
             "components": {
               "parameters": {
                 "PathUserId": {
