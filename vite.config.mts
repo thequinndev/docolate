@@ -21,6 +21,21 @@ export default defineConfig({
             100: true,
           },
           reporter: ["text", "json", "html"],
+          exclude: [
+            '**/src/db-manager/**', // This module isn't complete yet
+            '**/node_modules/**', // Ignore
+            '**/dist/**', // Ignore
+            '**/examples/**', // Ignore examples
+            // The below are export files only
+            '**/src/index.ts',
+            '**/src/route-manager.ts',
+            '**/src/route-manager/openapi/index.ts',
+            // Config files only
+            '.eslintrc.js' ,                                                                       
+            'route-manager.d.ts',                                                           
+            'tsup.config.ts',                      
+            'vite.config.mts'
+          ]
         },
     },
 });
