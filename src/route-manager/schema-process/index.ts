@@ -140,10 +140,10 @@ export const SchemaProcessor = () => {
     }
 
     const getComponents = () => {
-        if (Object.keys(componentsObject.schemas ?? {}).length == 0) {
+        if (Object.keys(componentsObject.schemas).length == 0) {
             delete componentsObject.schemas
         }
-        if (Object.keys(componentsObject.parameters ?? {}).length == 0) {
+        if (Object.keys(componentsObject.parameters).length == 0) {
             delete componentsObject.parameters
         }
 
@@ -155,10 +155,6 @@ export const SchemaProcessor = () => {
     }
 
     const ensureParametersTypesAreThereAndAdd = (ref: string, schema: any) => {
-        if (!componentsObject.parameters) {
-            componentsObject.parameters = {}
-        }
-
         componentsObject.parameters[ref] = schema
     }
 

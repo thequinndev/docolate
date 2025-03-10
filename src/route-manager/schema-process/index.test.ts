@@ -100,6 +100,42 @@ describe("processSchema", () => {
         $ref: "#/components/schemas/Layer1",
       });
     });
+    it("Will return a compiled json schema including refs", () => {
+        const schemaProcessor = SchemaProcessor();
+
+        const layer2 = z
+          .object({
+            key2: z.string(),
+          })
+          
+  
+        const layer1 = z
+          .object({
+            key1: layer2,
+          })
+          
+  
+        const result = schemaProcessor.processSchema(layer1);
+        expect(result).toEqual({
+            "properties": {
+              "key1": {
+                "properties": {
+                  "key2": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "key2",
+                ],
+                "type": "object",
+              },
+            },
+            "required": [
+              "key1",
+            ],
+            "type": "object",
+          });
+    });
     it("Will return a compiled json schema including refs - and handle no ref at the top level", () => {
       const schemaProcessor = SchemaProcessor();
       const layer3 = z
@@ -169,6 +205,18 @@ describe("processSchema", () => {
             expect(error).toEqual(new Error(RouteManagerErrors.NoArrayRefs))
         }
     })
+
+
+    it("Will return a primitive array as a normal schema", () => {
+        const primitiveArray = z.string().array()
+        const schemaProcessor = SchemaProcessor()
+        expect(schemaProcessor.processSchema(primitiveArray)).toEqual({
+            "items": {
+                "type": "string",
+              },
+              "type": "array",
+        })
+    })
   });
 });
 
@@ -208,4 +256,16 @@ describe("convertAndStrip", () => {
               })
         })
       });
+  });
+
+  describe("getComponents", () => {
+    describe("with No previous action", () => {
+      it("Will return an empty object", () => {
+            const schemaProcessor = SchemaProcessor()
+            expect(schemaProcessor.getComponents()).toEqual({
+                components: {}
+            })
+      })
+    });
+
   });
