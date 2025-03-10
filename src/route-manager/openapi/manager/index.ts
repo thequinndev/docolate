@@ -10,33 +10,33 @@ export const OpenAPIManager = <
         responses?: GetResponseSpecMetaDefault<SpecVersion>
     }
 }) => {
-    const documentAnnotations: any = {}
+    let documentAnnotations: any = {}
     let endpointGroupList: any = {}
 
     const addEndpointGroup = <
         Operations extends EndpointArrayByOperationIds<EndpointBase[]>,
-    >(endpointGroup: Operations) => {
-        const withAnnotation = <
-            OperationId extends keyof Operations,
-            Operation extends Operations[OperationId],
-            RequestBody extends InferRequestAccepts<Operation['accepts'], 'body'>
-        >(operationId: OperationId, annotations: {
+    >(endpointGroup: Operations, annotations?: {
+        [OperationId in keyof Operations]?: {
             path?: GetPathSpecMeta<SpecVersion>,
-            requestBody?: GetRequestBodySpecMeta<SpecVersion, RequestBody>,
-            responses?: InferResponsesForExamples<SpecVersion, Operation>
-        }) => {
-            documentAnnotations[operationId as string] = annotations
-            return {
-                withAnnotation,
-                addEndpointGroup
-            }
+            requestBody?: GetRequestBodySpecMeta<SpecVersion, InferRequestAccepts<Operations[OperationId]['accepts'], 'body'>>,
+            responses?: InferResponsesForExamples<SpecVersion, Operations[OperationId]>
         }
+    }) => {
+
+        if (!annotations) {
+            annotations = {}
+        }
+
+        documentAnnotations = {
+            ...documentAnnotations,
+            ...annotations
+        }
+
         endpointGroupList = {
             ...endpointGroupList,
             ...endpointGroup
         }
         return {
-            withAnnotation,
             addEndpointGroup,
         }
     }

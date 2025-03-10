@@ -27,17 +27,19 @@ const apiDocumentationDocument = OpenAPIManager({
     }
 });
 
-apiDocumentationDocument.addEndpointGroup(apiDocumentationEndpoints)
-.withAnnotation('getApiDocumentation', {
-    path: {
-        description: 'The API Documentation'
-    },
-    responses: {
-        200: {
-            description: 'Current API metadata for this version'
+apiDocumentationDocument.addEndpointGroup(apiDocumentationEndpoints, {
+    'getApiDocumentation': {
+        path: {
+            description: 'The API Documentation'
         },
+        responses: {
+            200: {
+                description: 'Current API metadata for this version'
+            },
+        }
     }
 })
+
 
 const apiUserDocument = OpenAPIManager({
     version: '3.0',
@@ -58,59 +60,61 @@ const apiUserDocument = OpenAPIManager({
     }
 });
 
-apiUserDocument.addEndpointGroup(userEndpoints)
-.withAnnotation('createUser', {
-    path: {
-        description: 'Create a new user'
-    },
-    responses: {
-        200: {
-            description: 'Successfully created the user',
+apiUserDocument.addEndpointGroup(userEndpoints, {
+    'createUser': {
+        path: {
+            description: 'Create a new user'
+        },
+        responses: {
+            200: {
+                description: 'Successfully created the user',
+                example: {
+                    id: 1,
+                    name: 'John Smith',
+                    description: 'A new user'
+                }
+            },
+        },
+        requestBody: {
             example: {
-                id: 1,
                 name: 'John Smith',
                 description: 'A new user'
             }
-        },
-    },
-    requestBody: {
-        example: {
-            name: 'John Smith',
-            description: 'A new user'
+
         }
-        
-    }
-})
-.withAnnotation('getUserById', {
-    path: {
-        description: 'Get a user by their User ID'
     },
-    responses: {
-        200: {
-            description: 'Successfully retrieved the user'
+    'getUserById': {
+        path: {
+            description: 'Get a user by their User ID'
         },
-    }
-})
-.withAnnotation('searchUsers', {
-    path: {
-        description: 'Search for users by their name or description'
+        responses: {
+            200: {
+                description: 'Successfully retrieved the user'
+            },
+        }
     },
-    responses: {
-        200: {
-            description: 'Successfully retrieved a list of users'
+    'searchUsers': {
+        path: {
+            description: 'Search for users by their name or description'
         },
-    }
-})
-.withAnnotation('updateUser', {
-    path: {
-        description: 'Update a user by their User ID'
+        responses: {
+            200: {
+                description: 'Successfully retrieved a list of users'
+            },
+        }
     },
-    responses: {
-        200: {
-            description: 'Successfully updated the user'
+    'updateUser': {
+        path: {
+            description: 'Update a user by their User ID'
         },
+        responses: {
+            200: {
+                description: 'Successfully updated the user'
+            },
+        }
     }
 })
+
 
 export const ApiDocumentExample = apiDocumentationDocument
 export const UserDocumentExample = apiUserDocument
