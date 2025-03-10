@@ -1,0 +1,38 @@
+{
+    "compilerOptions": {
+      "moduleResolution": "node",
+      "lib": ["es5", "es6", "es7", "esnext", "dom"],
+      "target": "es2018",
+      "strict": true,
+      "declaration": true,
+      "outDir": "./dist",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "resolveJsonModule": true,
+      "noImplicitAny": true,
+      "noImplicitThis": true,
+      "alwaysStrict": true,
+      "allowJs": true,
+      "skipDefaultLibCheck": true,
+      "strictFunctionTypes": true,
+      "strictNullChecks": true,
+      "forceConsistentCasingInFileNames": true,
+      "emitDeclarationOnly": true,
+      "types": ["vitest/globals", "node"]
+    },
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "src/db-manager/**/*.ts",
+      "node_modules",
+      "dist",
+      "examples",
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      "**/*.test.js",
+      "**/*.spec.js",
+      "vite.config.mts"
+    ]
+  }
+  
