@@ -54,8 +54,10 @@
   },
   "paths": {
     "/": {
-      "description": "The API Documentation",
+      "description": "API Root",
+      "summary": "Base Endpoint",
       "get": {
+        "description": "The API Documentation",
         "operationId": "getApiDocumentation",
         "responses": {
           "200": {
@@ -139,8 +141,10 @@
       }
     },
     "/users/{userId}": {
-      "description": "Get a user by their User ID",
+      "description": "Specific User Operations",
+      "summary": "User By ID Endpoints",
       "get": {
+        "description": "Get a user by their User ID",
         "operationId": "getUserById",
         "parameters": [
           {
@@ -233,6 +237,7 @@
         }
       },
       "put": {
+        "description": "Update a user by their User ID",
         "operationId": "updateUser",
         "requestBody": {
           "content": {
@@ -335,8 +340,10 @@
       }
     },
     "/users": {
-      "description": "Search for users by their name or description",
+      "description": "All User Operations",
+      "summary": "All User Endpoints",
       "get": {
+        "description": "Search for users by their name or description",
         "operationId": "searchUsers",
         "parameters": [
           {
@@ -472,6 +479,7 @@
         }
       },
       "post": {
+        "description": "Create a new user",
         "operationId": "createUser",
         "requestBody": {
           "content": {
