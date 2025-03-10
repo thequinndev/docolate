@@ -344,6 +344,7 @@
       "summary": "All User Endpoints",
       "get": {
         "description": "Search for users by their name or description",
+        "deprecated": true,
         "operationId": "searchUsers",
         "parameters": [
           {
