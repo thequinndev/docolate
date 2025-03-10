@@ -8,7 +8,12 @@ const componentFactory = ComponentFactory({
     schemas: [
         'Error',
         'ApiDocumentation',
-        'User'
+        'UserGet',
+        'UserCreate'
+    ],
+    parameters: [
+        'UserId',
+        'UserName'
     ]
 })
 
@@ -41,7 +46,10 @@ const userSchema = componentFactory.makeSchema(z.object({
     id: z.number(),
     name: z.string(),
     description: z.string(),
-}), 'User')
+}), 'UserGet')
+
+
+//const userIdParameter = componentFactory.makeParameterItem(userSchema.shape.id, 'UserId')
 
 const getUserById = routeManager.endpoint({
     operationId: 'getUserById',
@@ -59,6 +67,8 @@ const getUserById = routeManager.endpoint({
         500: error500
     }
 })
+
+//const nameParameter = componentFactory.makeParameterItem(userSchema.shape.name, 'UserName')
 
 const searchUsers = routeManager.endpoint({
     operationId: 'searchUsers',
@@ -83,7 +93,7 @@ const createUser = routeManager.endpoint({
     path: '/users',
     method: 'post',
     accepts: {
-        body: userSchema.omit({id: true})
+        body: componentFactory.makeSchema(userSchema.omit({id: true}), 'UserCreate')
     },
     returns: {
         200: userSchema,

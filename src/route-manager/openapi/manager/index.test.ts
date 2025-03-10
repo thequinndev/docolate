@@ -135,7 +135,22 @@ describe("OpenAPIManager", () => {
                     ],
                     "type": "object",
                   },
-                "User": {
+                  "UserCreate": {
+                    "properties": {
+                      "description": {
+                        "type": "string",
+                      },
+                      "name": {
+                        "type": "string",
+                      },
+                    },
+                    "required": [
+                      "name",
+                      "description",
+                    ],
+                    "type": "object",
+                  },
+                "UserGet": {
                     "properties": {
                         "description": {
                             "type": "string",
@@ -201,7 +216,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "$ref": "#/components/schemas/User"
+                                        "$ref": "#/components/schemas/UserGet"
                                     },
                                     "type": "array",
                                 },
@@ -261,7 +276,7 @@ describe("OpenAPIManager", () => {
                                 "name": "John Smith",
                             },
                             "schema": {
-                                "$ref": "#/components/schemas/User",
+                                "$ref": "#/components/schemas/UserCreate",
                             },
                         },
                     },
@@ -276,7 +291,7 @@ describe("OpenAPIManager", () => {
                                     "name": "John Smith",
                                 },
                                 "schema": {
-                                    "$ref": "#/components/schemas/User",
+                                    "$ref": "#/components/schemas/UserGet",
                                 },
                             },
                         },
@@ -355,7 +370,7 @@ describe("OpenAPIManager", () => {
                                     },
                                 },
                                 "schema": {
-                                    "$ref": "#/components/schemas/User",
+                                    "$ref": "#/components/schemas/UserGet",
                                 },
                             },
                         },
@@ -419,7 +434,7 @@ describe("OpenAPIManager", () => {
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/User",
+                                "$ref": "#/components/schemas/UserGet",
                             },
                         },
                     },
@@ -429,7 +444,7 @@ describe("OpenAPIManager", () => {
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/User",
+                                    "$ref": "#/components/schemas/UserGet",
                                 },
                             },
                         },
