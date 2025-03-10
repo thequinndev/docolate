@@ -31,6 +31,21 @@
           "apiDocumentation"
         ]
       },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      },
       "User": {
         "type": "object",
         "properties": {
@@ -77,21 +92,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -104,21 +105,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -163,6 +150,15 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "valid": {
+                    "value": {
+                      "id": 123,
+                      "name": "John Smith",
+                      "description": "A new user"
+                    }
+                  }
                 }
               }
             }
@@ -174,21 +170,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -201,21 +183,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -276,21 +244,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -303,21 +257,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -386,25 +326,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "number"
-                      },
-                      "name": {
-                        "type": "string"
-                      },
-                      "description": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "id",
-                      "name",
-                      "description"
-                    ],
-                    "additionalProperties": false,
-                    "description": "User"
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }
@@ -417,21 +339,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -444,21 +352,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -518,21 +412,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }
@@ -545,21 +425,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "type": "object",
-                    "properties": {
-                      "code": {
-                        "type": "string"
-                      },
-                      "message": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "code",
-                      "message"
-                    ],
-                    "additionalProperties": false,
-                    "description": "Error"
+                    "$ref": "#/components/schemas/Error"
                   }
                 }
               }

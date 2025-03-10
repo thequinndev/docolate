@@ -32,6 +32,21 @@ describe("OpenAPIManager", () => {
                             ],
                             "type": "object",
                         },
+                        "Error": {
+                            "properties": {
+                              "code": {
+                                "type": "string",
+                              },
+                              "message": {
+                                "type": "string",
+                              },
+                            },
+                            "required": [
+                              "code",
+                              "message",
+                            ],
+                            "type": "object",
+                          },
                     },
                 },
                 "paths": {
@@ -56,21 +71,7 @@ describe("OpenAPIManager", () => {
                                         "application/json": {
                                             "schema": {
                                                 "items": {
-                                                    "additionalProperties": false,
-                                                    "description": "Error",
-                                                    "properties": {
-                                                        "code": {
-                                                            "type": "string",
-                                                        },
-                                                        "message": {
-                                                            "type": "string",
-                                                        },
-                                                    },
-                                                    "required": [
-                                                        "code",
-                                                        "message",
-                                                    ],
-                                                    "type": "object",
+                                                    "$ref": "#/components/schemas/Error"
                                                 },
                                                 "type": "array",
                                             },
@@ -83,21 +84,7 @@ describe("OpenAPIManager", () => {
                                         "application/json": {
                                             "schema": {
                                                 "items": {
-                                                    "additionalProperties": false,
-                                                    "description": "Error",
-                                                    "properties": {
-                                                        "code": {
-                                                            "type": "string",
-                                                        },
-                                                        "message": {
-                                                            "type": "string",
-                                                        },
-                                                    },
-                                                    "required": [
-                                                        "code",
-                                                        "message",
-                                                    ],
-                                                    "type": "object",
+                                                    "$ref": "#/components/schemas/Error"
                                                 },
                                                 "type": "array",
                                             },
@@ -133,6 +120,21 @@ describe("OpenAPIManager", () => {
         expect(document.errors).toEqual([])
         expect(document.spec.components).toEqual({
             "schemas": {
+                "Error": {
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                      },
+                      "message": {
+                        "type": "string",
+                      },
+                    },
+                    "required": [
+                      "code",
+                      "message",
+                    ],
+                    "type": "object",
+                  },
                 "User": {
                     "properties": {
                         "description": {
@@ -199,25 +201,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "User",
-                                        "properties": {
-                                            "description": {
-                                                "type": "string",
-                                            },
-                                            "id": {
-                                                "type": "number",
-                                            },
-                                            "name": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "id",
-                                            "name",
-                                            "description",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/User"
                                     },
                                     "type": "array",
                                 },
@@ -230,21 +214,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
@@ -257,21 +227,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
@@ -331,21 +287,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
@@ -358,21 +300,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
@@ -438,21 +366,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
@@ -465,21 +379,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
@@ -540,21 +440,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
@@ -567,21 +453,7 @@ describe("OpenAPIManager", () => {
                             "application/json": {
                                 "schema": {
                                     "items": {
-                                        "additionalProperties": false,
-                                        "description": "Error",
-                                        "properties": {
-                                            "code": {
-                                                "type": "string",
-                                            },
-                                            "message": {
-                                                "type": "string",
-                                            },
-                                        },
-                                        "required": [
-                                            "code",
-                                            "message",
-                                        ],
-                                        "type": "object",
+                                        "$ref": "#/components/schemas/Error"
                                     },
                                     "type": "array",
                                 },
