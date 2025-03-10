@@ -1,20 +1,29 @@
+import { ComponentFactory } from '@thequinndev/route-manager/component-factory'
 import { RouteManager } from '@thequinndev/route-manager/endpoint'
 import { z } from 'zod'
 
 const routeManager = RouteManager()
 
-const errorSchema = z.object({
+const componentFactory = ComponentFactory({
+    schemas: [
+        'Error',
+        'ApiDocumentation',
+        'User'
+    ]
+})
+
+const errorSchema = componentFactory.makeSchema(z.object({
     code: z.string(),
     message: z.string(),
-}).describe('Error')
+}), 'Error')
 
 const error500 = z.enum(['Internal Server Error'])
 
-const apiDocumentationSchema = z.object({
+const apiDocumentationSchema = componentFactory.makeSchema(z.object({
     apiVersion: z.string(),
     apiStatus: z.enum(['active', 'deprecated', 'inactive']),
     apiDocumentation: z.string().url(),
-}).describe('ApiDocumentation')
+}), 'ApiDocumentation')
 
 const getApiDocumentation = routeManager.endpoint({
     operationId: 'getApiDocumentation',
@@ -28,11 +37,11 @@ const getApiDocumentation = routeManager.endpoint({
     }
 })
 
-const userSchema = z.object({
+const userSchema = componentFactory.makeSchema(z.object({
     id: z.number(),
     name: z.string(),
     description: z.string(),
-}).describe('User')
+}), 'User')
 
 const getUserById = routeManager.endpoint({
     operationId: 'getUserById',
