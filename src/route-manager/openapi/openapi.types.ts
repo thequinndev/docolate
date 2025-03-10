@@ -41,3 +41,7 @@ export type ValidRefFormat = `#/components/${string}`
 export type InferPathsFromGroupForAnnotation<Version extends OASVersions, Group extends EndpointArrayByOperationIds<EndpointBase[]>> = {
     [OperationId in keyof Group as Group[OperationId]['path']]?: GetPathSpecMeta<Version>
 }
+
+export type GetOperationSpecMeta<Version extends OASVersions> = Pick<Version extends '3.0' ? oas30.OperationObject : oas31.OperationObject,
+'description' | 'summary' | 'deprecated' | 'security' | 'servers' | 'callbacks'
+>

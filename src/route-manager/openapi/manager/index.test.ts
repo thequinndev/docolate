@@ -158,6 +158,7 @@ describe("OpenAPIManager", () => {
         expect(document.spec.paths["/users"]).toEqual({
             "description": "All User Operations",
             "get": {
+                "deprecated": true,
                 "description": "Search for users by their name or description",
                 "operationId": "searchUsers",
                 "parameters": [

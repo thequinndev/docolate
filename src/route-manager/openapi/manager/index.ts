@@ -1,6 +1,6 @@
 import { apiBuilder } from "../../build-endpoint";
 import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts } from "@thequinndev/route-manager/endpoint";
-import { OASVersions, GetResponseSpecMetaDefault, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation } from '../openapi.types'
+import { OASVersions, GetResponseSpecMetaDefault, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation, GetOperationSpecMeta } from '../openapi.types'
 
 export const OpenAPIManager = <
     SpecVersion extends OASVersions
@@ -19,7 +19,7 @@ export const OpenAPIManager = <
         paths?: InferPathsFromGroupForAnnotation<SpecVersion, Operations>,
         operations?: {
             [OperationId in keyof Operations]?: {
-                operation?: any,
+                operation?: GetOperationSpecMeta<SpecVersion>,
                 requestBody?: GetRequestBodySpecMeta<SpecVersion, InferRequestAccepts<Operations[OperationId]['accepts'], 'body'>>,
                 responses?: InferResponsesForExamples<SpecVersion, Operations[OperationId]>
             }

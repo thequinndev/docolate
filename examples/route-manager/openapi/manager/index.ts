@@ -114,7 +114,8 @@ apiUserDocument.addEndpointGroup(userEndpoints, {
         },
         'searchUsers': {
             operation: {
-                description: 'Search for users by their name or description'
+                description: 'Search for users by their name or description',
+                deprecated: true,
             },
             responses: {
                 200: {
