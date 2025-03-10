@@ -15,7 +15,7 @@ const removeUselessAnyOf = (schema: any) => {
     return schema
 }
 
-export const schemaPostProcess = (schema: any) => {
+export const schemaPreProcess = (schema: any) => {
     if (schema.anyOf) {
         schema = removeUselessAnyOf(schema)
     }
