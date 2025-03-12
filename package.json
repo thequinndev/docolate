@@ -28,6 +28,10 @@
     "package.json",
     "route-manager.d.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thequinndev/docolate.git"
+  },
   "author": "thequinndev",
   "license": "MIT",
   "dependencies": {
