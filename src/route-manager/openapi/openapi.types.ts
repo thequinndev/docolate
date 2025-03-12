@@ -40,13 +40,6 @@ export type InferPathsFromGroupForAnnotation<Version extends OASVersions, Group 
     [OperationId in keyof Group as Group[OperationId]['path']]?: GetPathSpecMeta<Version>
 }
 
-type OperationExtraMeta<OperationMeta extends string[]> = {
-    operation: OperationMeta
-}
-
-type InferExtraMeta<OperationMeta extends string[]> = {
-    [K in keyof OperationMeta[number]]: any
-}
 
 export type MetaManagerConfig<
     SpecVersion extends OASVersions,
