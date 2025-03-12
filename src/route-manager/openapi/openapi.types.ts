@@ -40,6 +40,49 @@ export type InferPathsFromGroupForAnnotation<Version extends OASVersions, Group 
     [OperationId in keyof Group as Group[OperationId]['path']]?: GetPathSpecMeta<Version>
 }
 
-export type GetOperationSpecMeta<Version extends OASVersions> = Pick<Version extends '3.0' ? oas30.OperationObject : oas31.OperationObject,
+export type TagItem<Version extends OASVersions, TagName extends string> =
+(Omit<(Version extends '3.0' ? oas30.TagObject : oas31.TagObject), 'name'>) & {
+    name: TagName,
+    description?: string,
+    externalDocs?: oas31.TagObject['externalDocs']
+}
+
+export type MetaManagerConfig<
+    SpecVersion extends OASVersions,
+    Tags extends TagItem<SpecVersion, string>[],
+    ExtraOperationMeta extends string[]
+> = {
+    version: SpecVersion,
+    tags?: Tags,
+    // Meta that doesn't exist natively in OpenAPI
+    customOperationMeta?: ExtraOperationMeta,
+}
+
+type InferCustomMetaOperations<OperationMetaConfig extends MetaConfigBase<OASVersions>['customOperationMeta']> = OperationMetaConfig extends string[] ? {
+    [Item in OperationMetaConfig[number]]?: any
+} : never
+
+export type InferTags<Tags> = Tags extends Record<string, true> ? {
+    tags?: (keyof Tags)[]
+} : {
+    tags?: string[]
+}
+
+export type MetaConfigBase<SpecVersion extends OASVersions> = MetaManagerConfig<SpecVersion, TagItem<SpecVersion, string>[], string[]>
+
+export type GetOperationSpecMeta<
+    Version extends OASVersions,
+    MetaConfig extends MetaConfigBase<Version>['customOperationMeta'],
+    Tags extends Record<string, true>
+> = Pick<Version extends '3.0' ? oas30.OperationObject : oas31.OperationObject,
 'description' | 'summary' | 'deprecated' | 'security' | 'servers' | 'callbacks' | 'externalDocs'
->
+> & InferCustomMetaOperations<MetaConfig>
+& InferTags<Tags>
+
+export type SafeTags<SpecVersion extends OASVersions, Tags extends (TagItem<SpecVersion, string>[] | undefined)> =
+Tags extends {
+    name: string
+}[]
+? {
+    [Tag in Tags[number] as Tag['name']]: true
+} : never

@@ -1,6 +1,6 @@
 {
   "name": "@thequinndev/docolate",
-  "version": "0.0.0-alpha.0",
+  "version": "0.1.0",
   "description": "",
   "type": "module",
   "main": "dist/index.js",
@@ -28,6 +28,10 @@
     "package.json",
     "route-manager.d.ts"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thequinndev/docolate.git"
+  },
   "author": "thequinndev",
   "license": "MIT",
   "dependencies": {
