@@ -1,6 +1,7 @@
 import { OpenAPISpecCompiler } from '@thequinndev/route-manager/openapi/compiler'
 import { writeFileSync } from 'fs';
 import { ApiDocumentExample, UserDocumentExample } from '../manager';
+import { metaManagerExample } from '../meta-manager'
 
 const compiler = OpenAPISpecCompiler({
     version: '3.0',
@@ -12,6 +13,7 @@ const compiler = OpenAPISpecCompiler({
             version: '1.0.0'
         }
     },
+    metaManager: metaManagerExample,
     openApiManagers: [
         ApiDocumentExample,
         UserDocumentExample
