@@ -1,6 +1,7 @@
 import {OpenAPISpecCompiler} from '.'
 
 import { ApiDocumentExample, UserDocumentExample } from "../../../../examples/route-manager/openapi/manager"
+import { metaManagerExample } from "../../../../examples/route-manager/openapi/meta-manager"
 
 describe("OpenAPISpecCompiler", () => {
     it('Will compile all examples', () => {
@@ -13,6 +14,7 @@ describe("OpenAPISpecCompiler", () => {
                     version: '1.0.0'
                 }
             },
+            metaManager: metaManagerExample,
             openApiManagers: [
                 ApiDocumentExample,
                 UserDocumentExample
@@ -478,6 +480,17 @@ describe("OpenAPISpecCompiler", () => {
                 "summary": "User By ID Endpoints",
               },
             },
+            "tags": [
+              {
+                "name": "example",
+              },
+              {
+                "name": "docolate",
+              },
+              {
+                "name": "route-manager",
+              },
+            ],
           })
     })
 })

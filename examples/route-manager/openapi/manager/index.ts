@@ -1,5 +1,6 @@
 import { OpenAPIManager } from '@thequinndev/route-manager/openapi/manager'
 import { apiDocumentationEndpoints, userEndpoints } from '../../endpoints'
+import { metaManagerExample } from '../meta-manager';
 
 
 const missingDocs = OpenAPIManager({
@@ -10,6 +11,7 @@ missingDocs.addEndpointGroup(apiDocumentationEndpoints)
 
 const apiDocumentationDocument = OpenAPIManager({
     version: '3.0',
+    metaManager: metaManagerExample,
     // Only these fields are required, the rest are optional
     // paths and components are omitted because they are built for you
     defaultMetadata: {
@@ -37,7 +39,12 @@ apiDocumentationDocument.addEndpointGroup(apiDocumentationEndpoints, {
     operations: {
         'getApiDocumentation': {
             operation: {
-                description: 'The API Documentation'
+                description: 'The API Documentation',
+                tags: [
+                    'docolate',
+                    'example',
+                    'route-manager'
+                ]
             },
             responses: {
                 200: {
