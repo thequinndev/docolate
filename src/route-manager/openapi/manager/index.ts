@@ -1,11 +1,13 @@
 import { apiBuilder } from "../../build-endpoint";
 import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts } from "../../endpoint";
-import { OASVersions, GetResponseSpecMetaDefault, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation, GetOperationSpecMeta } from '../openapi.types'
+import { OASVersions, GetResponseSpecMetaDefault, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation, GetOperationSpecMeta, MetaConfigBase } from '../openapi.types'
 
 export const OpenAPIManager = <
-    SpecVersion extends OASVersions
+    SpecVersion extends OASVersions,
+    MetaConfig extends MetaConfigBase<SpecVersion>,
 >(config: {
     version: SpecVersion,
+    metaManager?: MetaConfig,
     defaultMetadata?: {
         responses?: GetResponseSpecMetaDefault<SpecVersion>
     }
@@ -19,7 +21,7 @@ export const OpenAPIManager = <
         paths?: InferPathsFromGroupForAnnotation<SpecVersion, Operations>,
         operations?: {
             [OperationId in keyof Operations]?: {
-                operation?: GetOperationSpecMeta<SpecVersion>,
+                operation?: GetOperationSpecMeta<SpecVersion, MetaConfig extends MetaConfigBase<SpecVersion> ? MetaConfig['customOperationMeta'] : []>,
                 requestBody?: GetRequestBodySpecMeta<SpecVersion, InferRequestAccepts<Operations[OperationId]['accepts'], 'body'>>,
                 responses?: InferResponsesForExamples<SpecVersion, Operations[OperationId]>
             }
