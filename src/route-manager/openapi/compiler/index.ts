@@ -1,7 +1,7 @@
 //specFile: SpecBodyVersion,
 
 import { oas31 } from "openapi3-ts";
-import { OASVersions, InferSpecBodyFromVersion } from "../openapi.types";
+import { OASVersions, InferSpecBodyFromVersion, MetaConfigBase } from "../openapi.types";
 import { Error } from '../../build-endpoint'
 
 interface OpenApiManager {
@@ -20,7 +20,8 @@ interface OpenApiManager {
 export const OpenAPISpecCompiler = <SpecVersion extends OASVersions>(config: {
   version: SpecVersion;
   specFile: InferSpecBodyFromVersion<SpecVersion>,
-  openApiManagers: OpenApiManager[];
+  openApiManagers: OpenApiManager[],
+  metaManager?: MetaConfigBase<SpecVersion>
 }) => {
     const build = (buildConfig?: {
         failOnError?: boolean,
@@ -69,6 +70,15 @@ export const OpenAPISpecCompiler = <SpecVersion extends OASVersions>(config: {
             specFile.paths = {
                 ...specFile.paths,
                 ...subBuild.spec.paths
+            }
+        }
+
+        if (config.metaManager) {
+            if (Array.isArray(config.metaManager.tags)) {
+                specFile.tags = [
+                    ...config.metaManager.tags,
+                    ...(specFile.tags ? specFile.tags : [])
+                ]
             }
         }
 
