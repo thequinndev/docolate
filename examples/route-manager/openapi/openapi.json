@@ -86,6 +86,8 @@
         "in": "path",
         "name": "userId",
         "required": true,
+        "description": "Test",
+        "example": 0,
         "schema": {
           "type": "number"
         }
@@ -94,6 +96,7 @@
         "in": "query",
         "name": "name",
         "required": false,
+        "description": "Example",
         "schema": {
           "type": "string"
         }
@@ -327,6 +330,7 @@
             "in": "query",
             "name": "description",
             "required": false,
+            "description": "Example",
             "schema": {
               "type": "string"
             }
