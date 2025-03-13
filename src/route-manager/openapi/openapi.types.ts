@@ -18,6 +18,25 @@ export type GetResponseSpecMetaDefault<Version extends OASVersions> = {
     [Status in ValidStatusCodes]?: Omit<Version extends '3.0' ? oas30.ResponseObject : oas31.ResponseObject, 'content'>
 }
 
+type InferObjectForExamples<T extends object> = {
+    [Key in keyof T]?: {
+        description?: string
+    } & ValidExamples<T[Key]>
+}
+
+export type InferPathParamsForExamples<
+Endpoint extends EndpointBase
+> = Endpoint['accepts'] extends {
+    path: z.ZodObject<any>
+} ? InferObjectForExamples<z.infer<Endpoint['accepts']['path']>> : never
+
+export type InferQueryParamsForExamples<
+Endpoint extends EndpointBase
+> = Endpoint['accepts'] extends {
+    query: z.ZodObject<any>
+} ? InferObjectForExamples<z.infer<Endpoint['accepts']['query']>> : never
+
+
 export type InferResponsesForExamples<
 Version extends OASVersions,
 Endpoint extends EndpointBase

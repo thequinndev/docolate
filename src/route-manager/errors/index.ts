@@ -11,4 +11,6 @@ export const RouteManagerErrors = {
     ].join('\n'),
     NoArrayParameter: "You cannot make parameters from arrays",
     NoObjectParameter: "You cannot make parameters from objects",
+    PathMissingParameter: (path: string, param: string) => `Path ${path} is missing parameter ${param}.`,
+    ParameterInPathNotDeclared: (path: string, param: string) => `Path parameter ${param} is not declared, but exists in path ${path}.`,
 }

@@ -1,6 +1,6 @@
 import { apiBuilder } from "../../build-endpoint";
 import { EndpointArrayByOperationIds, EndpointBase, InferRequestAccepts } from "../../endpoint";
-import { OASVersions, GetResponseSpecMetaDefault, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation, GetOperationSpecMeta, MetaConfigBase, SafeTags } from '../openapi.types'
+import { OASVersions, GetResponseSpecMetaDefault, GetRequestBodySpecMeta, InferResponsesForExamples, InferPathsFromGroupForAnnotation, GetOperationSpecMeta, MetaConfigBase, SafeTags, InferPathParamsForExamples, InferQueryParamsForExamples } from '../openapi.types'
 
 export const OpenAPIManager = <
     SpecVersion extends OASVersions,
@@ -27,7 +27,11 @@ export const OpenAPIManager = <
                     MetaConfig extends MetaConfigBase<SpecVersion> ? SafeTags<SpecVersion, MetaConfig['tags']> : never
                 >,
                 requestBody?: GetRequestBodySpecMeta<SpecVersion, InferRequestAccepts<Operations[OperationId]['accepts'], 'body'>>,
-                responses?: InferResponsesForExamples<SpecVersion, Operations[OperationId]>
+                responses?: InferResponsesForExamples<SpecVersion, Operations[OperationId]>,
+                parameters?: {
+                    path?: InferPathParamsForExamples<Operations[OperationId]>,
+                    query?: InferQueryParamsForExamples<Operations[OperationId]>
+                }
             }
         }
 

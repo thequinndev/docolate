@@ -126,6 +126,14 @@ apiUserDocument.addEndpointGroup(userEndpoints, {
                         }
                     }
                 },
+            },
+            parameters: {
+                path: {
+                    'userId': {
+                        description: 'Test',
+                        example: 0,
+                    }
+                }
             }
         },
         'searchUsers': {
@@ -137,6 +145,16 @@ apiUserDocument.addEndpointGroup(userEndpoints, {
                 200: {
                     description: 'Successfully retrieved a list of users'
                 },
+            },
+            parameters: {
+                'query': {
+                    'description': {
+                        description: 'Example'
+                    },
+                    name: {
+                        description: 'Example'
+                    }
+                }
             }
         },
         'updateUser': {

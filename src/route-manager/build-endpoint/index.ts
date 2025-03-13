@@ -1,7 +1,7 @@
-import { z } from "zod";
 import { EndpointBase } from "../endpoint";
 import { SchemaProcessor } from "../schema-process";
 import { RouteManagerErrors } from "../errors";
+import { getParamsFromPath } from "../path-param-get";
 
 export type Error = {
     path: string,
@@ -35,24 +35,26 @@ export const apiBuilder = (config: {
         })
     }
 
-    const processAccepts = (endpoint: EndpointBase, annotations?: any) => {
+    const processAccepts = (endpoint: EndpointBase, annotationsRequestBody?: any, annotationsParams?: any) => {
         const result = {} as any
         let parameters = [] as any[]
         const accepts = endpoint.accepts
         if (accepts?.body) {
             const schema = schemaProcessor.processSchema(accepts.body)
-            annotations = annotations ?? {}
+            annotationsRequestBody = annotationsRequestBody ?? {}
             result['requestBody'] = {
-                ...buildContent(schema, annotations)
+                ...buildContent(schema, annotationsRequestBody)
             }
         }
     
         if (accepts?.path) {
-            parameters = buildParams('path', accepts.path, parameters)
+            const annotations = annotationsParams?.path ?? {}
+            parameters = buildParams(endpoint, 'path', parameters, annotations)
         }
     
         if (accepts?.query) {
-            parameters = buildParams('query', accepts.query, parameters)
+            const annotations = annotationsParams?.query ?? {}
+            parameters = buildParams(endpoint, 'query', parameters, annotations)
         }
     
         if (parameters.length) {
@@ -62,16 +64,43 @@ export const apiBuilder = (config: {
         return result
     }
     
-    const buildParams = (inType: 'query' | 'path', paramSchema: z.ZodObject<any>, parameters: any[]) => {
+    const buildParams = (endpoint: EndpointBase, inType: 'query' | 'path', parameters: any[], annotations?: any) => {
+        const paramSchema = endpoint.accepts![inType]!
+
+        const pathParams = getParamsFromPath(endpoint.path) as Record<string, boolean>
+
         for (const name in paramSchema.shape) {
+            const paramAnnotation = (annotations?.[name]) ?? {}
+
+            if (inType === 'path' && (pathParams[name] === undefined)) {
+                addErrorMessage(endpoint, RouteManagerErrors.PathMissingParameter(endpoint.path, name), 'error')
+                if (config.failOnError) {
+                    throwLastError()
+                }
+            }
+
+            pathParams[name] = true
             const required = paramSchema.shape[name].isOptional() === false
             const item = {
                 in: inType,
                 name,
                 required,
-
+                ...paramAnnotation
             }
             parameters.push(schemaProcessor.processParameter(item, paramSchema.shape[name]))
+        }
+
+        const falseRemainder = Object.entries(pathParams)
+        .filter(([key, value]) => value === false)
+        .map(([key]) => key);
+
+        if (inType == 'path' && (falseRemainder.length)) {
+            for (const name of falseRemainder) {
+                addErrorMessage(endpoint, RouteManagerErrors.ParameterInPathNotDeclared(endpoint.path, name), 'error')
+                if (config.failOnError) {
+                    throwLastError()
+                }
+            }
         }
         
         return parameters
@@ -143,7 +172,7 @@ export const apiBuilder = (config: {
 
     const buildEndpointBody = (endpoint: EndpointBase, allAnnotations?: any) => {
         const annotations = allAnnotations?.operations?.[endpoint.operationId] ?? {}
-        const accepts = processAccepts(endpoint, annotations?.requestBody)
+        const accepts = processAccepts(endpoint, annotations?.requestBody, annotations?.parameters)
         const returns = processReturns(endpoint, annotations?.responses)
     
         const pathAnnotation = allAnnotations?.paths?.[endpoint.path] ?? {}
@@ -182,6 +211,7 @@ export const apiBuilder = (config: {
     return {
         buildEndpointBody,
         newSpecFile,
-        getErrors
+        getErrors,
+        buildParams
     }
 }
