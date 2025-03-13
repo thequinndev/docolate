@@ -60,7 +60,11 @@ export const SchemaProcessor = () => {
         for (const key in shape) {
             const valueSchema = shape[key];
 
-            if (schemaIs.object(valueSchema)) {
+            if (schemaIs.array(valueSchema)) {
+                collected.properties[key] = {
+                    ...handleArray(valueSchema)
+                }
+            } else if (schemaIs.object(valueSchema)) {
                 const ref = getSchemaId(valueSchema)
                 const jsonSchema = processZodObject(valueSchema)
                 if (ref) {
@@ -88,6 +92,38 @@ export const SchemaProcessor = () => {
         return collected
     }
 
+    const handleArray = (schema: z.ZodArray<any>): any => {
+        // Array components add a complexity overhead and prevent the underlying objects from being modular
+        // I also don't think they're even allowed under components.schemas in OpenAPI
+        if (getSchemaId(schema)) {
+            throw new Error(RouteManagerErrors.NoArrayRefs)
+        }
+
+        const arrayJsonSchema = convertAndStrip(schema)
+
+        const internalSchema = (schema as z.ZodArray<any>).element
+        if (schemaIs.object(internalSchema)) {
+            const ref = getSchemaId(internalSchema)
+            if (ref) {
+                const result = processZodObject(
+                    internalSchema as z.ZodObject<any>
+                );
+
+                componentsObject.schemas[ref] = result
+
+                arrayJsonSchema.items = {
+                    '$ref': makeSchemaRef(ref)
+                }
+
+                return arrayJsonSchema
+            }
+
+        }
+
+        arrayJsonSchema.items = convertAndStrip(internalSchema)
+        return arrayJsonSchema
+    }
+
     const processSchema = (schema: z.ZodType<any>): any => {
 
         if (schemaIs.array(schema)) {
@@ -97,29 +133,7 @@ export const SchemaProcessor = () => {
                 throw new Error(RouteManagerErrors.NoArrayRefs)
             }
 
-            const arrayJsonSchema = convertAndStrip(schema)
-
-            const internalSchema = (schema as z.ZodArray<any>).element
-            if (schemaIs.object(internalSchema)) {
-                const ref = getSchemaId(internalSchema)
-                if (ref) {
-                    const result = processZodObject(
-                        internalSchema as z.ZodObject<any>
-                    );
-    
-                    componentsObject.schemas[ref] = result
-    
-                    arrayJsonSchema.items = {
-                        '$ref': makeSchemaRef(ref)
-                    }
-
-                    return arrayJsonSchema
-                }
-   
-            }
-
-            arrayJsonSchema.items = convertAndStrip(internalSchema)
-            return arrayJsonSchema
+            return handleArray(schema as z.ZodArray<any>)
         }
 
         if (schemaIs.object(schema)) {
