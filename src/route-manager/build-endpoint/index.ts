@@ -2,6 +2,7 @@ import { z } from "zod";
 import { EndpointBase } from "../endpoint";
 import { SchemaProcessor } from "../schema-process";
 import { RouteManagerErrors } from "../errors";
+import { getParamsFromPath } from "../path-param-get";
 
 export type Error = {
     path: string,
@@ -48,11 +49,11 @@ export const apiBuilder = (config: {
         }
     
         if (accepts?.path) {
-            parameters = buildParams('path', accepts.path, parameters)
+            parameters = buildParams(endpoint, 'path', parameters)
         }
     
         if (accepts?.query) {
-            parameters = buildParams('query', accepts.query, parameters)
+            parameters = buildParams(endpoint, 'query', parameters)
         }
     
         if (parameters.length) {
@@ -62,8 +63,20 @@ export const apiBuilder = (config: {
         return result
     }
     
-    const buildParams = (inType: 'query' | 'path', paramSchema: z.ZodObject<any>, parameters: any[]) => {
+    const buildParams = (endpoint: EndpointBase, inType: 'query' | 'path', parameters: any[]) => {
+        const paramSchema = endpoint.accepts![inType]!
+
+        const pathParams = getParamsFromPath(endpoint.path) as Record<string, boolean>
+
         for (const name in paramSchema.shape) {
+            if (inType === 'path' && (pathParams[name] === undefined)) {
+                addErrorMessage(endpoint, RouteManagerErrors.PathMissingParameter(endpoint.path, name), 'error')
+                if (config.failOnError) {
+                    throwLastError()
+                }
+            }
+
+            pathParams[name] = true
             const required = paramSchema.shape[name].isOptional() === false
             const item = {
                 in: inType,
@@ -72,6 +85,19 @@ export const apiBuilder = (config: {
 
             }
             parameters.push(schemaProcessor.processParameter(item, paramSchema.shape[name]))
+        }
+
+        const falseRemainder = Object.entries(pathParams)
+        .filter(([key, value]) => value === false)
+        .map(([key]) => key);
+
+        if (inType == 'path' && (falseRemainder.length)) {
+            for (const name of falseRemainder) {
+                addErrorMessage(endpoint, RouteManagerErrors.ParameterInPathNotDeclared(endpoint.path, name), 'error')
+                if (config.failOnError) {
+                    throwLastError()
+                }
+            }
         }
         
         return parameters
@@ -182,6 +208,7 @@ export const apiBuilder = (config: {
     return {
         buildEndpointBody,
         newSpecFile,
-        getErrors
+        getErrors,
+        buildParams
     }
 }
