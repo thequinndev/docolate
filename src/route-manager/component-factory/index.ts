@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { RouteManagerErrors } from "../errors";
+import { schemaIs } from "../utility";
 
 export const ComponentFactory = <
 SchemaItems extends string,
@@ -11,7 +12,7 @@ Parameters extends ParameterItems[]
     parameters?: Parameters
 }) => {
     const makeSchema = <T extends z.ZodType<any>, Id extends Schemas[number]>(schema: T, id: Id) => {
-        if (schema instanceof z.ZodArray) {
+        if (schemaIs.array(schema)) {
             throw new Error(RouteManagerErrors.NoArrayRefs)
         }
         schema = schema.describe(id)
@@ -19,10 +20,10 @@ Parameters extends ParameterItems[]
     }
 
     const makeParameterItem = <T extends z.ZodType<any>, Id extends Parameters[number]>(parameter: T, id: Id) => {
-        if (parameter instanceof z.ZodArray) {
+        if (schemaIs.array(parameter)) {
             throw new Error(RouteManagerErrors.NoArrayParameter)
         }
-        if (parameter instanceof z.ZodObject) {
+        if (schemaIs.object(parameter)) {
             throw new Error(RouteManagerErrors.NoObjectParameter)
         }
         parameter = parameter.describe(id)
