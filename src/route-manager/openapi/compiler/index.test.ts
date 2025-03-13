@@ -180,6 +180,11 @@ describe("OpenAPISpecCompiler", () => {
                       "description": "Internal server error",
                     },
                   },
+                  "tags": [
+                    "docolate",
+                    "example",
+                    "route-manager",
+                  ],
                 },
                 "summary": "Base Endpoint",
               },
