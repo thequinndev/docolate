@@ -195,6 +195,165 @@ describe("processSchema", () => {
     });
   });
 
+  describe("with Object With Nested Arrays", () => {
+    it("Will return a compiled json schema including refs", () => {
+      const schemaProcessor = SchemaProcessor();
+      const layer3 = z
+        .object({
+          key3: z.string(),
+        })
+        .describe("Layer3");
+
+      const layer2 = z
+        .object({
+          key2: layer3,
+        })
+        .describe("Layer2");
+
+      const layer1 = z
+        .object({
+          key1: layer2.array(),
+        })
+        .describe("Layer1");
+
+      const result = schemaProcessor.processSchema(layer1);
+      expect(schemaProcessor.getComponents()).toEqual({
+        components: {
+          schemas: {
+            Layer1: {
+              type: "object",
+              properties: {
+                key1: {
+                  items: {
+                    $ref: "#/components/schemas/Layer2",
+                  },
+                  type: "array"
+                },
+              },
+              required: ["key1"],
+            },
+            Layer2: {
+              type: "object",
+              properties: {
+                key2: {
+                  schema: {
+                    $ref: "#/components/schemas/Layer3",
+                  },
+                },
+              },
+              required: ["key2"],
+            },
+            Layer3: {
+              type: "object",
+              properties: {
+                key3: {
+                  type: "string",
+                },
+              },
+              required: ["key3"],
+            },
+          },
+        },
+      });
+      expect(result).toEqual({
+        $ref: "#/components/schemas/Layer1",
+      });
+    });
+    it("Will return a compiled json schema including refs", () => {
+        const schemaProcessor = SchemaProcessor();
+
+        const layer2 = z
+          .object({
+            key2: z.string(),
+          })
+          
+  
+        const layer1 = z
+          .object({
+            key1: layer2,
+          })
+          
+  
+        const result = schemaProcessor.processSchema(layer1);
+        expect(result).toEqual({
+            "properties": {
+              "key1": {
+                "properties": {
+                  "key2": {
+                    "type": "string",
+                  },
+                },
+                "required": [
+                  "key2",
+                ],
+                "type": "object",
+              },
+            },
+            "required": [
+              "key1",
+            ],
+            "type": "object",
+          });
+    });
+    it("Will return a compiled json schema including refs - and handle no ref at the top level", () => {
+      const schemaProcessor = SchemaProcessor();
+      const layer3 = z
+        .object({
+          key3: z.string(),
+        })
+        .describe("Layer3");
+
+      const layer2 = z
+        .object({
+          key2: layer3,
+        })
+        .describe("Layer2");
+
+      const layer1 = z.object({
+        key1: layer2,
+      });
+
+      const result = schemaProcessor.processSchema(layer1);
+      expect(schemaProcessor.getComponents()).toEqual({
+        components: {
+          schemas: {
+            Layer2: {
+              type: "object",
+              properties: {
+                key2: {
+                  schema: {
+                    $ref: "#/components/schemas/Layer3",
+                  },
+                },
+              },
+              required: ["key2"],
+            },
+            Layer3: {
+              type: "object",
+              properties: {
+                key3: {
+                  type: "string",
+                },
+              },
+              required: ["key3"],
+            },
+          },
+        },
+      });
+      expect(result).toEqual({
+        type: "object",
+        properties: {
+          key1: {
+            schema: {
+              $ref: "#/components/schemas/Layer2",
+            },
+          },
+        },
+        required: ["key1"],
+      });
+    });
+  });
+
   describe("with Array", () => {
     it("Will throw an error if you try to make an $ref array", () => {
         const invalidArray = z.object({name: z.string()}).array().describe('Anything')
