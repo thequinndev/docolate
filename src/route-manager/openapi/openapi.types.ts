@@ -19,7 +19,7 @@ export type GetResponseSpecMetaDefault<Version extends OASVersions> = {
 }
 
 type InferObjectForExamples<T extends object> = {
-    [Key in keyof T]: {
+    [Key in keyof T]?: {
         description?: string
     } & ValidExamples<T[Key]>
 }
