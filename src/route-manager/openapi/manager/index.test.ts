@@ -126,6 +126,8 @@ describe("OpenAPIManager", () => {
         expect(document.spec.components).toEqual({
             "parameters": {
                 "PathUserId": {
+                    "description": "Test",
+                    "example": 0,
                     "in": "path",
                     "name": "userId",
                     "required": true,
@@ -134,6 +136,7 @@ describe("OpenAPIManager", () => {
                     },
                 },
                 "QueryUserName": {
+                    "description": "Example",
                     "in": "query",
                     "name": "name",
                     "required": false,
@@ -206,6 +209,7 @@ describe("OpenAPIManager", () => {
                         "$ref": "#/components/parameters/QueryUserName"
                     },
                     {
+                        "description": "Example",
                         "in": "query",
                         "name": "description",
                         "required": false,

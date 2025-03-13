@@ -25,6 +25,8 @@ describe("OpenAPISpecCompiler", () => {
             "components": {
               "parameters": {
                 "PathUserId": {
+                  "description": "Test",
+                  "example": 0,
                   "in": "path",
                   "name": "userId",
                   "required": true,
@@ -33,6 +35,7 @@ describe("OpenAPISpecCompiler", () => {
                   },
                 },
                 "QueryUserName": {
+                  "description": "Example",
                   "in": "query",
                   "name": "name",
                   "required": false,
@@ -199,6 +202,7 @@ describe("OpenAPISpecCompiler", () => {
                       "$ref": "#/components/parameters/QueryUserName",
                     },
                     {
+                      "description": "Example",
                       "in": "query",
                       "name": "description",
                       "required": false,
