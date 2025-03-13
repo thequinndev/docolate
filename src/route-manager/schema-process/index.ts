@@ -3,6 +3,7 @@ import zodToJsonSchema from "zod-to-json-schema";
 import { ValidRefFormat } from "../openapi/openapi.types";
 import { RouteManagerErrors } from "../errors";
 import { schemaPreProcess } from "./schema-pre-process";
+import { schemaIs } from "../utility";
 
 const refFormats = {
     schemas: '#/components/schemas' as ValidRefFormat,
@@ -59,7 +60,7 @@ export const SchemaProcessor = () => {
         for (const key in shape) {
             const valueSchema = shape[key];
 
-            if (valueSchema instanceof z.ZodObject) {
+            if (schemaIs.object(valueSchema)) {
                 const ref = getSchemaId(valueSchema)
                 const jsonSchema = processZodObject(valueSchema)
                 if (ref) {
@@ -89,7 +90,7 @@ export const SchemaProcessor = () => {
 
     const processSchema = (schema: z.ZodType<any>): any => {
 
-        if (schema instanceof z.ZodArray) {
+        if (schemaIs.array(schema)) {
 
             // Array components add a complexity overhead and prevent the underlying objects from being modular
             if (getSchemaId(schema)) {
@@ -98,8 +99,8 @@ export const SchemaProcessor = () => {
 
             const arrayJsonSchema = convertAndStrip(schema)
 
-            const internalSchema = schema.element
-            if (internalSchema instanceof z.ZodObject) {
+            const internalSchema = (schema as z.ZodArray<any>).element
+            if (schemaIs.object(internalSchema)) {
                 const ref = getSchemaId(internalSchema)
                 if (ref) {
                     const result = processZodObject(
@@ -121,7 +122,7 @@ export const SchemaProcessor = () => {
             return arrayJsonSchema
         }
 
-        if (schema instanceof z.ZodObject) {
+        if (schemaIs.object(schema)) {
             const ref = getSchemaId(schema)
             const result = processZodObject(
                 schema as z.ZodObject<any>
