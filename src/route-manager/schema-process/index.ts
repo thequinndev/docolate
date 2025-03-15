@@ -1,16 +1,15 @@
 import { z } from "zod";
-import zodToJsonSchema from "zod-to-json-schema";
-import { ValidRefFormat } from "../openapi/openapi.types";
+import { OASVersions, ValidRefFormat } from "../openapi/openapi.types";
 import { RouteManagerErrors } from "../errors";
-import { schemaPreProcess } from "./schema-pre-process";
 import { schemaIs } from "../utility";
+import { convertAndStrip } from "./convert-and-strip";
 
 const refFormats = {
     schemas: '#/components/schemas' as ValidRefFormat,
     parameters: '#/components/parameters' as ValidRefFormat
 }
 
-export const SchemaProcessor = () => {
+export const SchemaProcessor = (version: OASVersions) => {
     const componentsObject = {
         schemas: {},
         parameters: {}
@@ -26,25 +25,13 @@ export const SchemaProcessor = () => {
         return schema._def.description ?? null;
     };
 
-
-    const convertAndStrip = (schema: z.ZodType<any>) => {
-        let jsonSchema = zodToJsonSchema(schema) as any;
-        jsonSchema = schemaPreProcess(jsonSchema)
-        delete jsonSchema["$ref"];
-        delete jsonSchema["$schema"];
-        delete jsonSchema["additionalProperties"];
-        delete jsonSchema["description"]
-
-        return jsonSchema;
-    };
-
     const processObject = (schema: z.ZodObject<any>): any => {
-        const jsonSchema = convertAndStrip(schema) as any;
+        const jsonSchema = convertAndStrip(schema, version) as any;
         return jsonSchema
     };
 
     const processProperty = (schema: z.ZodSchema): any => {
-        const jsonSchema = convertAndStrip(schema);
+        const jsonSchema = convertAndStrip(schema, version);
         return jsonSchema
     };
 
@@ -99,7 +86,7 @@ export const SchemaProcessor = () => {
             throw new Error(RouteManagerErrors.NoArrayRefs)
         }
 
-        const arrayJsonSchema = convertAndStrip(schema)
+        const arrayJsonSchema = convertAndStrip(schema, version)
 
         const internalSchema = (schema as z.ZodArray<any>).element
         if (schemaIs.object(internalSchema)) {
@@ -120,7 +107,7 @@ export const SchemaProcessor = () => {
 
         }
 
-        arrayJsonSchema.items = convertAndStrip(internalSchema)
+        arrayJsonSchema.items = convertAndStrip(internalSchema, version)
         return arrayJsonSchema
     }
 
@@ -151,7 +138,7 @@ export const SchemaProcessor = () => {
             return result;
         }
 
-        return convertAndStrip(schema);
+        return convertAndStrip(schema, version);
     }
 
     const getComponents = () => {
@@ -179,7 +166,7 @@ export const SchemaProcessor = () => {
             const paramRef = makeParameterRef(ref)
             ensureParametersTypesAreThereAndAdd(ref, {
                 ...parameterBase,
-                schema: convertAndStrip(schema)
+                schema: convertAndStrip(schema, version)
             })
             return {
                 '$ref': paramRef
@@ -188,7 +175,7 @@ export const SchemaProcessor = () => {
 
         return {
             ...parameterBase,
-            schema: convertAndStrip(schema)
+            schema: convertAndStrip(schema, version)
         }
     }
 
@@ -196,7 +183,6 @@ export const SchemaProcessor = () => {
         getSchemaId,
         processSchema,
         getComponents,
-        convertAndStrip,
         processParameter
     }
 }

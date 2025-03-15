@@ -72,6 +72,7 @@ export const OpenAPIManager = <
         failOnError: boolean
     }) => {
         const builder = apiBuilder({
+            version: config.version,
             failOnError: buildConfig.failOnError,
             defaultMetadata: config.defaultMetadata ?? {}
         })

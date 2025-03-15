@@ -5,14 +5,14 @@ import { RouteManagerErrors } from "../errors";
 describe("getSchemaId", () => {
   describe("with ID", () => {
     it("will return an ID if it exists (object)", () => {
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const testSchema = z.object({}).describe("Mock");
       const id = schemaProcessor.getSchemaId(testSchema);
       expect(id).toEqual("Mock");
     });
 
     it("will return an ID if it exists (property)", () => {
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const testSchema = z.string().describe("Mock");
       const id = schemaProcessor.getSchemaId(testSchema);
       expect(id).toEqual("Mock");
@@ -21,7 +21,7 @@ describe("getSchemaId", () => {
 
   describe("without ID", () => {
     it("will return null if it does not exist (object)", () => {
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const testSchema = z.object({});
       const id = schemaProcessor.getSchemaId(testSchema);
       expect(id).toEqual(null);
@@ -29,7 +29,7 @@ describe("getSchemaId", () => {
 
     it("will return null if it does not exist (property)", () => {
       const testSchema = z.string();
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const id = schemaProcessor.getSchemaId(testSchema);
       expect(id).toEqual(null);
     });
@@ -39,7 +39,7 @@ describe("getSchemaId", () => {
 describe("processSchema", () => {
   describe("with Object", () => {
     it("Will return a compiled json schema including refs", () => {
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const layer3 = z
         .object({
           key3: z.string(),
@@ -101,7 +101,7 @@ describe("processSchema", () => {
       });
     });
     it("Will return a compiled json schema including refs", () => {
-        const schemaProcessor = SchemaProcessor();
+        const schemaProcessor = SchemaProcessor('3.0');
 
         const layer2 = z
           .object({
@@ -137,7 +137,7 @@ describe("processSchema", () => {
           });
     });
     it("Will return a compiled json schema including refs - and handle no ref at the top level", () => {
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const layer3 = z
         .object({
           key3: z.string(),
@@ -197,7 +197,7 @@ describe("processSchema", () => {
 
   describe("with Object With Nested Arrays", () => {
     it("Will return a compiled json schema including refs", () => {
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const layer3 = z
         .object({
           key3: z.string(),
@@ -260,7 +260,7 @@ describe("processSchema", () => {
       });
     });
     it("Will return a compiled json schema including refs", () => {
-        const schemaProcessor = SchemaProcessor();
+        const schemaProcessor = SchemaProcessor('3.0');
 
         const layer2 = z
           .object({
@@ -296,7 +296,7 @@ describe("processSchema", () => {
           });
     });
     it("Will return a compiled json schema including refs - and handle no ref at the top level", () => {
-      const schemaProcessor = SchemaProcessor();
+      const schemaProcessor = SchemaProcessor('3.0');
       const layer3 = z
         .object({
           key3: z.string(),
@@ -358,7 +358,7 @@ describe("processSchema", () => {
     it("Will throw an error if you try to make an $ref array", () => {
         const invalidArray = z.object({name: z.string()}).array().describe('Anything')
         try {
-            const schemaProcessor = SchemaProcessor()
+            const schemaProcessor = SchemaProcessor('3.0')
             schemaProcessor.processSchema(invalidArray)
         } catch(error) {
             expect(error).toEqual(new Error(RouteManagerErrors.NoArrayRefs))
@@ -368,7 +368,7 @@ describe("processSchema", () => {
 
     it("Will return a primitive array as a normal schema", () => {
         const primitiveArray = z.string().array()
-        const schemaProcessor = SchemaProcessor()
+        const schemaProcessor = SchemaProcessor('3.0')
         expect(schemaProcessor.processSchema(primitiveArray)).toEqual({
             "items": {
                 "type": "string",
@@ -379,52 +379,15 @@ describe("processSchema", () => {
   });
 });
 
-describe("convertAndStrip", () => {
-    describe("with Primitives", () => {
-      it("Will remove useless json schema", () => {
-            const schemaProcessor = SchemaProcessor()
-            const result = schemaProcessor.convertAndStrip(z.string().describe('RemoveMe'))
-            expect(result).toEqual({
-                type: 'string'
-            })
-      })
-    });
 
-    describe("with Primitives derived from objects", () => {
-        it("Will remove useless json schema", () => {
-              const schemaProcessor = SchemaProcessor()
-              const parent = z.object({
-                name: z.string()
-              })
-              const result = schemaProcessor.convertAndStrip(parent.shape.name.describe('RemoveMe'))
-              expect(result).toEqual({
-                  type: 'string'
-              })
-        })
-      });
-
-      describe("with Primitives derived from partial objects", () => {
-        it("Will remove useless json schema", () => {
-              const schemaProcessor = SchemaProcessor()
-              const parent = z.object({
-                name: z.string()
-              }).partial()
-              const result = schemaProcessor.convertAndStrip(parent.shape.name.describe('RemoveMe'))
-              expect(result).toEqual({
-                  type: 'string'
-              })
-        })
-      });
+describe("getComponents", () => {
+  describe("with No previous action", () => {
+    it("Will return an empty object", () => {
+          const schemaProcessor = SchemaProcessor('3.0')
+          expect(schemaProcessor.getComponents()).toEqual({
+              components: {}
+          })
+    })
   });
 
-  describe("getComponents", () => {
-    describe("with No previous action", () => {
-      it("Will return an empty object", () => {
-            const schemaProcessor = SchemaProcessor()
-            expect(schemaProcessor.getComponents()).toEqual({
-                components: {}
-            })
-      })
-    });
-
-  });
+});

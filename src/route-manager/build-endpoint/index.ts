@@ -2,6 +2,7 @@ import { EndpointBase } from "../endpoint";
 import { SchemaProcessor } from "../schema-process";
 import { RouteManagerErrors } from "../errors";
 import { getParamsFromPath } from "../path-param-get";
+import { OASVersions } from "../openapi";
 
 export type Error = {
     path: string,
@@ -12,6 +13,7 @@ export type Error = {
 }
 
 export const apiBuilder = (config: {
+    version: OASVersions,
     failOnError: boolean,
     defaultMetadata: any
 }) => {
@@ -19,7 +21,7 @@ export const apiBuilder = (config: {
     let errors: Error[] = []
     let apiPaths: any = {}
 
-    const schemaProcessor = SchemaProcessor()
+    const schemaProcessor = SchemaProcessor(config.version)
 
     const throwLastError = () => {
         throw new Error(JSON.stringify(errors[errors.length - 1], null, 2))
@@ -35,12 +37,19 @@ export const apiBuilder = (config: {
         })
     }
 
+    const checkForUnionWarnings = (endpoint: EndpointBase, schema: any) => {
+        if (schema.oneOf || schema.anyOf) {
+            addErrorMessage(endpoint, RouteManagerErrors.UnionTypeWarning, 'warning')
+        }
+    }
+
     const processAccepts = (endpoint: EndpointBase, annotationsRequestBody?: any, annotationsParams?: any) => {
         const result = {} as any
         let parameters = [] as any[]
         const accepts = endpoint.accepts
         if (accepts?.body) {
             const schema = schemaProcessor.processSchema(accepts.body)
+            checkForUnionWarnings(endpoint, schema)
             annotationsRequestBody = annotationsRequestBody ?? {}
             result['requestBody'] = {
                 ...buildContent(schema, annotationsRequestBody)
@@ -144,6 +153,7 @@ export const apiBuilder = (config: {
             }
             const responseItem = (returns as any)[statusCode]
             const schema = schemaProcessor.processSchema(responseItem)
+            checkForUnionWarnings(endpoint, schema)
             responses[statusCode] = {
                 ...buildContent(schema, annotation)
             }

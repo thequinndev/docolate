@@ -18,7 +18,7 @@ describe("apiBuilder", () => {
                 returns: {}
             } as EndpointBase
     
-            const builder = apiBuilder({failOnError: false, defaultMetadata: {}})
+            const builder = apiBuilder({ version: '3.0', failOnError: false, defaultMetadata: {}})
             builder.buildParams(endpoint, 'path', [])
 
             expect(builder.getErrors()).toEqual([
@@ -49,7 +49,7 @@ describe("apiBuilder", () => {
 
 
             try {
-                const builder = apiBuilder({failOnError: true, defaultMetadata: {}})
+                const builder = apiBuilder({ version: '3.0', failOnError: true, defaultMetadata: {}})
                 builder.buildParams(endpoint, 'path', [])
             } catch (error) {
                 expect(error).toEqual(new Error(JSON.stringify(
@@ -78,7 +78,7 @@ describe("apiBuilder", () => {
                 returns: {}
             } as EndpointBase
     
-            const builder = apiBuilder({failOnError: false, defaultMetadata: {}})
+            const builder = apiBuilder({ version: '3.0', failOnError: false, defaultMetadata: {}})
             builder.buildParams(endpoint, 'path', [])
 
             expect(builder.getErrors()).toEqual([
@@ -108,7 +108,7 @@ describe("apiBuilder", () => {
 
 
             try {
-                const builder = apiBuilder({failOnError: true, defaultMetadata: {}})
+                const builder = apiBuilder({ version: '3.0', failOnError: true, defaultMetadata: {}})
                 builder.buildParams(endpoint, 'path', [])
             } catch (error) {
                 expect(error).toEqual(new Error(JSON.stringify(
