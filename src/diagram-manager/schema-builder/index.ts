@@ -1,8 +1,9 @@
 import { z } from "zod";
-import { RelationshipType, SchemaData } from "../mermaid/er-diagram/data";
+import { RelationshipData, RelationshipType, SchemaData } from "../mermaid/er-diagram/data";
 import zodToJsonSchema from "zod-to-json-schema";
 import { renderErDiagramObject } from "../mermaid/er-diagram/render/render-object";
-import { aliasPlaceholder } from "../mermaid/formatting";
+import { aliasPlaceholder, tabRelations } from "../mermaid/formatting";
+import { mermaidTemplate } from "../mermaid/template";
 
 type SchemaEntityTypes = 'table' | 'view' | 'materialized view'
 
@@ -48,6 +49,24 @@ export type EntitiesByEntityName<
 
 export type GetEntityProperties<T extends SchemaEntityItemBase> = EntityKeys<T['entityType'], T['entitySchema']>
 
+const LeftHand: Record<RelationshipType, string> = {
+    ZeroOrOne: "|o",
+    ExactlyOne: "||",
+    ZeroOrMore: "}o",
+    OneOrMore: "}|",
+}
+  
+const RightHand: Record<RelationshipType, string> = {
+    ZeroOrOne: "o|",
+    ExactlyOne: "||",
+    ZeroOrMore: "o{",
+    OneOrMore: "|{",
+}
+
+type BuildConfig = {
+    standaloneRelationships?: boolean
+}
+
 export const SchemaBuilder = <
 EntityItems extends SchemaEntityItemBase[],
 IndexedEntities extends EntitiesByEntityName<EntityItems>
@@ -56,9 +75,11 @@ IndexedEntities extends EntitiesByEntityName<EntityItems>
     otherEntities?: Record<string, string>
 }) => {
 
+    const relationshipStrings: string[] = []
+
     const _schemaData: SchemaData = {
         schemas: {},
-        relationShips: []
+        relationShips: [],
     }
 
     const _entityMap = config.entities.reduce((acc, entity) => {
@@ -82,11 +103,22 @@ IndexedEntities extends EntitiesByEntityName<EntityItems>
         return constraints
     }
 
+    const buildRelationship = (relationshipData: RelationshipData) => {
+        const leftHandEntity = resolveEntityName(relationshipData.from.entity)
+        const leftHandType = LeftHand[relationshipData.from.relationshipType ?? 'ExactlyOne']
+        const leftHandSide = `${tabRelations}${leftHandEntity} ${leftHandType}`
+        const relationshipType = relationshipData.identifying ? '--' : '..'
+        const rightHandType = LeftHand[relationshipData.to.relationshipType ?? 'ExactlyOne']
+        const rightHandEntity = resolveEntityName(relationshipData.to.entity)
+        const label = relationshipData.relationshipLabel ? `"${relationshipData.relationshipLabel}"` : '""'
+        relationshipStrings.push(`${leftHandSide}${relationshipType}${rightHandType} ${rightHandEntity} : ${label}`)
+    }
 
     const addRelationship = <
         FromEntity extends keyof IndexedEntities,
         ToEntity extends keyof IndexedEntities
     >(relationshipData: {
+        identifying?: boolean,
         from: {
             entity: FromEntity,
             relationshipType?: RelationshipType,
@@ -94,18 +126,26 @@ IndexedEntities extends EntitiesByEntityName<EntityItems>
         to: {
             entity: ToEntity,
             relationshipType?: RelationshipType,
-        }
+        },
+        relationshipLabel?: string
     }) => {
         _schemaData.relationShips.push(relationshipData)
+        buildRelationship(relationshipData)
         return {
             addRelationship,
             build,
         }
     }
 
-    const build = (buildConfig?: {
+    const resolveEntityName = (name: string): string => {
+        if (name.includes('.')) {
+          return name.split('.')[1].toUpperCase()
+        }
+      
+        return name.toUpperCase()
+      }
 
-    }) => {
+    const build = (buildConfig?: BuildConfig) => {
         const mermaidBlocks: string[] = []
 
         for (const entity of (Object.values(_entityMap) as SchemaEntityItemBase[])) {
@@ -149,7 +189,25 @@ IndexedEntities extends EntitiesByEntityName<EntityItems>
             mermaidBlocks.push(mermaidBlock)
         }
 
-        return mermaidBlocks
+        const _buildConfig = buildConfig ?? {
+            standaloneRelationships: true
+        } as BuildConfig
+
+        const files: string[] = []
+        if (_buildConfig.standaloneRelationships) {
+            files.push(mermaidTemplate('erDiagram', relationshipStrings.join('\n')))
+
+            files.push(mermaidTemplate('erDiagram', mermaidBlocks.join('\n')))
+
+            return files
+        }
+
+        files.push(mermaidTemplate('erDiagram', [
+            ...mermaidBlocks,
+            ...relationshipStrings
+        ].join('\n')))
+
+        return files
 
     }
 

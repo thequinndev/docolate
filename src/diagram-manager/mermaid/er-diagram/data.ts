@@ -23,6 +23,7 @@ export type EntityData = {
 export type RelationshipType = 'ZeroOrOne' | 'ExactlyOne' | 'ZeroOrMore' | 'OneOrMore'
 
 export type RelationshipData = {
+    identifying?: boolean,
     from: {
         entity: any,
         relationshipType?: RelationshipType,
@@ -30,7 +31,8 @@ export type RelationshipData = {
     to: {
         entity: any,
         relationshipType?: RelationshipType,
-    }
+    },
+    relationshipLabel?: string,
 }
 
 export type SchemaData = {

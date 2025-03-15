@@ -1,12 +1,13 @@
 import { z } from "zod"
 import { SchemaBuilder, schemaEntity } from "../../../src/diagram-manager/schema-builder"
+import { writeFileSync } from "fs"
 
 const customersTable = schemaEntity({
     entityType: 'table',
     entityName: 'customers',
     entitySchema: z.object({
         id: z.number(),
-        name: z.string(),
+        name: z.string().max(50),
         description: z.string().max(100),
     }),
     primaryKeys: ['id']
@@ -17,14 +18,13 @@ const ordersTable = schemaEntity({
     entitySchema: z.object({
         id: z.number(),
         customer_id: z.number(),
-        name: z.string(),
+        name: z.string().max(50),
         description: z.string().max(100),
     }),
     entityType: 'table',
     primaryKeys: ['id'],
     foreignKeys: ['customer_id']
 })
-
 
 const schemaBuilder = SchemaBuilder({
     entities: [
@@ -34,6 +34,7 @@ const schemaBuilder = SchemaBuilder({
 })
 
 schemaBuilder.addRelationship({
+    identifying: true,
     from: {
         entity: 'customers',
         relationshipType: 'ExactlyOne',
@@ -41,8 +42,9 @@ schemaBuilder.addRelationship({
     to: {
         entity: 'orders',
         relationshipType: 'OneOrMore',
-    }
+    },
+    relationshipLabel: 'has'
 })
 
-const diagram = schemaBuilder.build()
-console.log(diagram)
+const diagramFiles = schemaBuilder.build({standaloneRelationships: false})
+writeFileSync(__dirname + '/example.md', diagramFiles[0])
