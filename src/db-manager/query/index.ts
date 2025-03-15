@@ -32,21 +32,6 @@ z.ZodType<any>, //ParameterSchema
 z.ZodType<any>
 >
 
-/*export type QueryCollapsed<
-  Description extends string,
-  Alias extends string,
-  QueryString extends string,
-  Parameters extends {[key in string]: z.ZodType<any>}[],
-  Returns extends z.ZodType<any>,
-> = {
-  description?: Description;
-  alias: Alias;
-  query: QueryString;
-  parameters?: QueryParametersCollapsed<Parameters>;
-  returns: Returns;
-  onResultRetrieval?: (result: any) => void;
-};*/
-
 export type QueryCollapsed<
   Query extends BaseQueryItem
 > = {
@@ -77,25 +62,6 @@ export type QueryIn<T extends QueryParametersCollapsed<ParamSchemaBase> | undefi
 export type QueryOut<QueryItem extends BaseCollapsedQueryItem> = z.infer<
   QueryItem["returns"]
 >;
-
-/*
-export type QueryParametersCollapsed<T extends ParamSchemaBase | undefined> = T extends ParamSchemaBase? {
-  collapsed: {
-    [K in T[number] extends infer R
-      ? R extends Record<infer Key, infer Schema>
-        ? Key extends string
-          ? Schema extends z.ZodType<any>
-            ? { key: Key; type: z.infer<Schema> }
-            : never
-          : never
-        : never
-      : never as K["key"]]: K["type"];
-  };
-  original: T,
-  arrayResolver: (params: any) => any[],
-  keyValueResolver: (params: any) => any
-} : never;
-*/
 
 export type QueryParametersCollapsed<Parameters extends {[key in string]: z.ZodType<any>}[] | undefined> =
 Parameters extends {[key in string]: z.ZodType<any>}[] ?
