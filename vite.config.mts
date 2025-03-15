@@ -22,7 +22,6 @@ export default defineConfig({
           },
           reporter: ["text", "json", "html"],
           exclude: [
-            '**/src/db-manager/**', // This module isn't complete yet
             '**/node_modules/**', // Ignore
             '**/dist/**', // Ignore
             '**/examples/**', // Ignore examples
