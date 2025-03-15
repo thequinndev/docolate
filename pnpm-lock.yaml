@@ -21,6 +21,9 @@ importers:
       '@thequinndev/db-manager':
         specifier: workspace:*
         version: link:src/db-manager
+      '@thequinndev/diagram-manager':
+        specifier: workspace:*
+        version: link:src/diagram-manager
       '@thequinndev/route-manager':
         specifier: workspace:*
         version: link:src/route-manager
@@ -68,6 +71,8 @@ importers:
         version: 3.0.8(@types/node@22.13.10)(tsx@4.19.3)(yaml@2.7.0)
 
   src/db-manager: {}
+
+  src/diagram-manager: {}
 
   src/route-manager: {}
 
