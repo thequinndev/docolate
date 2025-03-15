@@ -1,6 +1,6 @@
 import { ParameterStrategy, QueryManager } from '.'
 import { mockArrayClient, mockKeyValueClient } from '../testing'
-import { query, queryGroup, queryParameters } from '../query'
+import { query, queryGroup, queryParameter } from '../query'
 import { z } from 'zod'
 
 describe('QueryManager', () => {
@@ -26,20 +26,12 @@ describe('QueryManager', () => {
                         query: 'select * from create_mock($1, $2, $3, $4)',
                         alias: 'createMock',
                         description: 'Create a user',
-                        parameters: queryParameters([
-                            {
-                                param1: z.string()
-                            },
-                            {
-                                param2: z.number()
-                            },
-                            {
-                                param3: z.string()
-                            },
-                            {
-                                param4: z.string()
-                            },
-                        ] as const),
+                        parameters: [
+                            queryParameter('param1', z.string()),
+                            queryParameter('param2', z.number()),
+                            queryParameter('param3', z.string()),
+                            queryParameter('param4', z.string()),
+                        ],
                         returns: z.object({
                             mock: z.object({
                                 response: z.string()
@@ -72,20 +64,12 @@ describe('QueryManager', () => {
                         query: 'select * from create_mock($1, $2, $3, $4)',
                         alias: 'createMock',
                         description: 'Create a user',
-                        parameters: queryParameters([
-                            {
-                                param1: z.string()
-                            },
-                            {
-                                param2: z.number()
-                            },
-                            {
-                                param3: z.string()
-                            },
-                            {
-                                param1: z.string() //duplicate of param1
-                            },
-                        ] as const),
+                        parameters: [
+                            queryParameter('param1', z.string()),
+                            queryParameter('param2', z.number()),
+                            queryParameter('param3', z.string()),
+                            queryParameter('param1', z.string()),//duplicate of param1
+                        ],
                         returns: z.object({
                             mock: z.object({
                                 response: z.string()
@@ -136,20 +120,12 @@ describe('QueryManager', () => {
                         query: 'select * from create_mock($1, $2, $3, $4)',
                         alias: 'createMock',
                         description: 'Create a user',
-                        parameters: queryParameters([
-                            {
-                                param1: z.string()
-                            },
-                            {
-                                param2: z.number()
-                            },
-                            {
-                                param3: z.string()
-                            },
-                            {
-                                param4: z.string()
-                            },
-                        ] as const),
+                        parameters: [
+                            queryParameter('param1', z.string()),
+                            queryParameter('param2', z.number()),
+                            queryParameter('param3', z.string()),
+                            queryParameter('param4', z.string()),
+                        ],
                         returns: z.object({
                             mock: z.object({
                                 response: z.string()
