@@ -67,7 +67,7 @@ type BuildConfig = {
     standaloneRelationships?: boolean
 }
 
-export const SchemaBuilder = <
+export const ERDiagramBuilder = <
 EntityItems extends SchemaEntityItemBase[],
 IndexedEntities extends EntitiesByEntityName<EntityItems>
 >(config: {
@@ -108,7 +108,7 @@ IndexedEntities extends EntitiesByEntityName<EntityItems>
         const leftHandType = LeftHand[relationshipData.from.relationshipType ?? 'ExactlyOne']
         const leftHandSide = `${tabRelations}${leftHandEntity} ${leftHandType}`
         const relationshipType = relationshipData.identifying ? '--' : '..'
-        const rightHandType = LeftHand[relationshipData.to.relationshipType ?? 'ExactlyOne']
+        const rightHandType = RightHand[relationshipData.to.relationshipType ?? 'ExactlyOne']
         const rightHandEntity = resolveEntityName(relationshipData.to.entity)
         const label = relationshipData.relationshipLabel ? `"${relationshipData.relationshipLabel}"` : '""'
         relationshipStrings.push(`${leftHandSide}${relationshipType}${rightHandType} ${rightHandEntity} : ${label}`)

@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { SchemaBuilder, schemaEntity } from "../../../src/diagram-manager/schema-builder"
+import { ERDiagramBuilder, schemaEntity } from "../../../src/diagram-manager/er-diagram-builder"
 import { writeFileSync } from "fs"
 
 const customersTable = schemaEntity({
@@ -26,14 +26,14 @@ const ordersTable = schemaEntity({
     foreignKeys: ['customer_id']
 })
 
-const schemaBuilder = SchemaBuilder({
+const diagramBuilder = ERDiagramBuilder({
     entities: [
         customersTable,
         ordersTable
     ]
 })
 
-schemaBuilder.addRelationship({
+diagramBuilder.addRelationship({
     identifying: true,
     from: {
         entity: 'customers',
@@ -46,5 +46,5 @@ schemaBuilder.addRelationship({
     relationshipLabel: 'has'
 })
 
-const diagramFiles = schemaBuilder.build({standaloneRelationships: false})
+const diagramFiles = diagramBuilder.build({standaloneRelationships: false})
 writeFileSync(__dirname + '/example.md', diagramFiles[0])

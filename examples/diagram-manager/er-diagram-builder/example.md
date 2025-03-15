@@ -12,5 +12,5 @@ erDiagram
         string(50) name
         string(100) description
     }
-    CUSTOMERS ||--}| ORDERS : "has"
+    CUSTOMERS ||--|{ ORDERS : "has"
 ```
