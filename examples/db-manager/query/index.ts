@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { query, queryGroup, queryParameters } from '@thequinndev/db-manager/query'
+import { query, queryGroup, queryParameter } from '@thequinndev/db-manager/query'
 
 const userTableSchema = z.object({
     id: z.coerce.number().min(1).max(400000),
@@ -8,7 +8,7 @@ const userTableSchema = z.object({
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/)
 })
 
-const userIdParam = queryParameters([{ id:  userTableSchema.shape.id }] as const)
+const userId = queryParameter('id', userTableSchema.shape.id)
 
 const getAllUsers = query({
     query: 'select * from user_table',
@@ -21,7 +21,7 @@ const getUserById = query({
     query: 'select * from user_table where id = $1',
     alias: 'getUserById',
     description: 'Get all columns by ID',
-    parameters: userIdParam,
+    parameters: [userId],
     returns: userTableSchema
 })
 
@@ -29,7 +29,7 @@ const getUserNameAndDateById = query({
     query: 'select name, date from user_table where id = $1',
     alias: 'getUserNameAndDateById',
     description: 'Get just name and date by ID',
-    parameters: userIdParam,
+    parameters: [userId],
     returns: userTableSchema.pick({name: true, date: true})
 })
 
@@ -37,14 +37,10 @@ const createUser = query({
     query: 'select * from create_user($1, $2)',
     alias: 'createUser',
     description: 'Create a user',
-    parameters: queryParameters([
-        {
-            name: userTableSchema.shape.name
-        },
-        {
-            description: userTableSchema.shape.description
-        }
-    ] as const),
+    parameters: [
+        queryParameter('name', userTableSchema.shape.name),
+        queryParameter('description', userTableSchema.shape.description),
+    ],
     returns: userTableSchema
 })
 

@@ -1,12 +1,12 @@
 import { z } from "zod";
 import { zodToJsonSchema } from "zod-to-json-schema";
 import {
-  BaseQueryItem,
+  BaseCollapsedQueryItem,
   GetQuery,
   QueriesByAlias,
   QueryIn,
   QueryOut,
-} from "../query.types";
+} from "../query/index";
 
 export enum ParameterStrategy {
   Plain = 0,
@@ -16,19 +16,19 @@ export enum ParameterStrategy {
   Dollar = 4,
 }
 
-type QueryAnnotation<T extends BaseQueryItem> = {
+type QueryAnnotation<T extends BaseCollapsedQueryItem> = {
     title?: string,
     parameterExample?: QueryIn<T['parameters']>,
     returnExample?: QueryOut<T>
 }
 
 export const DocumentManager = <
-  Queries extends QueriesByAlias<BaseQueryItem[]>,
+  Queries extends QueriesByAlias<BaseCollapsedQueryItem[]>,
 >(config: {
   paramaterStrategy: ParameterStrategy;
   queries: Queries;
 }) => {
-  let aliasMetadata: Record<string, QueryAnnotation<BaseQueryItem>> = {};
+  let aliasMetadata: Record<string, QueryAnnotation<BaseCollapsedQueryItem>> = {};
 
   const annotate = <
     Alias extends keyof Queries,
@@ -64,7 +64,7 @@ export const DocumentManager = <
     return props
   }
 
-  const compileDataTypes = (item: BaseQueryItem) => {
+  const compileDataTypes = (item: BaseCollapsedQueryItem) => {
     const params = collectParameters(item.query)
 
     const dataTypeSections: string[] = []
